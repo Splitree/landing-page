@@ -2,6 +2,8 @@
 
 A modern, animated landing page for Splitree - the intelligent expense splitting app that automates group cost management.
 
+🚀 **[View Live Site](https://splitree-landing.netlify.app/)**
+
 ![Splitree Landing Page](public/logo_icon.png)
 
 ## 🚀 Overview
@@ -25,6 +27,7 @@ Splitree is designed to make splitting costs seamless, automatic, and emotionall
 - **Icons**: [Heroicons](https://heroicons.com) for beautiful SVG icons
 - **TypeScript**: Full TypeScript support for type safety
 - **Font**: Optimized font loading with `next/font`
+- **Deployment**: [Netlify](https://netlify.com) with automatic deployments
 
 ## 🚦 Getting Started
 
@@ -78,6 +81,7 @@ bun dev
 │       └── page.tsx           # Main landing page component
 ├── tailwind.config.ts         # Tailwind CSS configuration
 ├── next.config.ts             # Next.js configuration
+├── netlify.toml               # Netlify deployment configuration
 └── package.json               # Project dependencies and scripts
 ```
 
@@ -122,9 +126,8 @@ Update the landing page content by editing the arrays and text in `src/app/page.
 
 ## 🚀 Deployment
 
-The easiest way to deploy this Next.js app is using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/splitree-landing-page)
+This project is deployed on [Netlify](https://netlify.com) and is live at:
+**[https://splitree-landing.netlify.app/](https://splitree-landing.netlify.app/)**
 
 ## 📱 About Splitree
 
