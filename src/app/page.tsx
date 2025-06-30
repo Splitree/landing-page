@@ -77,7 +77,8 @@ export default function Home() {
                 <span className="text-xs sm:text-sm font-medium">Coming Soon</span>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                We automate the <span className="text-gradient">awkward</span> — <br className="hidden sm:block"/>
+                We automate the <span className="text-gradient">awkward</span> —{' '}
+                <br className="block sm:hidden"/>
                 so you can split costs, not time.
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
