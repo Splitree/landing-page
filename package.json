@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@netlify/plugin-nextjs": "^5.11.4",
     "framer-motion": "^12.19.2",
     "next": "15.3.4",
     "react": "^19.0.0",
