@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "Handl Privacy Policy",
   description:
@@ -162,12 +162,12 @@ const PrivacyPage = () => {
               described in this Privacy Policy. If you do not agree, please do
               not use the Services.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-flex items-center mt-8 text-sm font-semibold text-brand-primary hover:text-brand-text-primary transition-colors"
             >
               ← Back to Home
-            </a>
+            </Link>
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import Link from "next/link";
 export const metadata: Metadata = {
   title: "Handl Terms & Conditions",
   description:
@@ -198,12 +198,12 @@ const TermsPage = () => {
               accessing or using Handl, you agree to be bound by these Terms. If
               you do not agree, do not access or use the Services.
             </p>
-            <a
+            <Link
               href="/"
               className="inline-flex items-center mt-8 text-sm font-semibold text-brand-primary hover:text-brand-text-primary transition-colors"
             >
               ← Back to Home
-            </a>
+            </Link>
           </div>
         </div>
       </section>

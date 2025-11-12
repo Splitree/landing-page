@@ -240,7 +240,7 @@ export default function Home() {
                 <span className="text-gradient block mt-2">Split Any Expense in Seconds.</span>
               </h2>
               <p className="text-xl text-brand-text-secondary max-w-3xl mx-auto">
-                Whether you're at dinner, on a trip, or sharing rent — Handl adapts to how you live. 
+                Whether you&apos;re at dinner, on a trip, or sharing rent — Handl adapts to how you live. 
                 No spreadsheets, no awkward texts, no math.
               </p>
             </motion.div>
@@ -439,7 +439,7 @@ export default function Home() {
                   </h3>
                   <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
                     Want a custom split? Just type what you want in plain English and Handl automatically 
-                    calculates everyone's share instantly.
+                    calculates everyone&apos;s share instantly.
                   </p>
                   <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
                     <SparklesIcon className="w-5 h-5" />
@@ -458,7 +458,7 @@ export default function Home() {
                       <span className="text-xs font-semibold text-brand-text-tertiary">Your prompt:</span>
                     </div>
                     <div className="text-sm text-brand-text-secondary italic pl-6">
-                      "Split evenly but Sarah pays 30%"
+                      &ldquo;Split evenly but Sarah pays 30%&rdquo;
                     </div>
                   </div>
                   
@@ -577,8 +577,8 @@ export default function Home() {
               <div className="border-t border-gray-200 pt-8">
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-brand-primary mb-4 font-nunito">Ready to Get Started?</h3>
-                  <p className="text-brand-text-secondary mb-6">
-                    Sign up now and we'll send you an invite to join the beta
+                    <p className="text-brand-text-secondary mb-6">
+                      Sign up now and we&apos;ll send you an invite to join the beta
                   </p>
                   
                   <div className="max-w-md mx-auto">
