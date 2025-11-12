@@ -24,15 +24,15 @@ export default function Home() {
 
         <div className="container-custom py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               <Image
                 src="/logo_icon.png" 
                 alt="Handl Logo" 
                 width={40} 
                 height={40}
-                className="w-10 h-10"
+                className="w-9 h-9 -translate-y-[-1px]"
               />
-              <span className="text-2xl font-bold tracking-tight text-brand-primary font-nunito leading-none">Handl</span>
+              <span className="text-[1.75rem] font-bold tracking-tight text-brand-primary font-nunito leading-tight">Handl</span>
             </div>
             <div className="hidden md:flex items-center gap-8">
               <button 
@@ -707,15 +707,15 @@ export default function Home() {
       <footer className="bg-brand-primary border-t border-pine-alt py-12">
         <div className="container-custom">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <Image
                 src="/logo_icon.png" 
                 alt="Handl Logo" 
                 width={32} 
                 height={32}
-                className="w-8 h-8"
+                className="w-7 h-7 -translate-y-[1px]"
               />
-              <span className="text-xl font-bold text-white font-nunito">Handl</span>
+              <span className="text-[1.25rem] font-bold text-white font-nunito leading-tight">Handl</span>
             </div>
             
             <div className="flex items-center gap-8">
