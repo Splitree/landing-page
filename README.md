@@ -1,51 +1,50 @@
-# Splitree Landing Page
+# Handl Landing Page
 
-A modern, animated landing page for Splitree - the intelligent expense splitting app that automates group cost management.
+A modern landing experience for **Handl**—the expense sharing companion that helps teams, friends, and families split costs without the awkward math.
 
-🚀 **[View Live Site](https://splitree-landing.netlify.app/)**
-
-![Splitree Landing Page](public/logo_icon.png)
+![Handl Landing Page](public/logo_icon.png)
 
 ## 🚀 Overview
 
-Splitree is designed to make splitting costs seamless, automatic, and emotionally effortless. This landing page showcases the app's features with beautiful animations and interactive elements, built with modern web technologies.
+This project rebrands the original Splitree marketing site into Handl’s beta launch page. It spotlights a new visual language inspired by the mobile app, complete with:
 
-## ✨ Features
+- A floating iPhone mockup showcasing the Handl home screen
+- A four-step guided flow that mirrors how users split expenses inside the app
+- A prominent beta sign-up funnel that links directly to the live waitlist form
+- Warm cream and pine green accents that align with the in-app design
 
-- **Modern Design**: Clean, professional interface with subtle animations
-- **Responsive**: Fully responsive design that works on all devices
-- **Interactive**: Engaging hover effects and micro-interactions
-- **Animated Components**: Smooth animations powered by Framer Motion
-- **Performance Optimized**: Built with Next.js 15 for optimal performance
-- **Accessible**: Designed with accessibility best practices
+## ✨ What’s New
+
+- **Handl Branding** – Updated typography, palette, and copy across the experience
+- **Beta CTA Everywhere** – All primary CTAs send users to the beta registration form
+- **Four-Step Storytelling** – The features section now mirrors real usage: link card, tap a transaction, snap a receipt, and write a prompt
+- **Polished Mockups** – Consistent card heights, tailored micro-illustrations, and a realistic receipt + AI prompt preview
+- **Modern Layout** – Hero badge, stat tiles, gradients, and floating cards that match the app aesthetic
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org) with App Router
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) for utility-first styling
-- **Animations**: [Framer Motion](https://www.framer.com/motion/) for smooth animations
-- **Icons**: [Heroicons](https://heroicons.com) for beautiful SVG icons
-- **TypeScript**: Full TypeScript support for type safety
-- **Font**: Optimized font loading with `next/font`
-- **Deployment**: [Netlify](https://netlify.com) with automatic deployments
+- **Framework**: [Next.js 15](https://nextjs.org) with the App Router
+- **Styling**: [Tailwind CSS](https://tailwindcss.com) extended with Handl’s brand tokens
+- **Animations**: [Framer Motion](https://www.framer.com/motion/) for scroll and hover interactions
+- **Icons**: [Heroicons](https://heroicons.com) for crisp SVG iconography
+- **Fonts**: Nunito + Inter/Inter Tight via `next/font`
+- **TypeScript**: End-to-end typing for maintainability
+- **Deployment**: Works with any modern platform (Vercel, Netlify, Render, etc.)
 
 ## 🚦 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm, yarn, pnpm, or bun
+- Node.js 18+
+- A package manager: npm, yarn, pnpm, or bun
 
 ### Installation
 
-1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd splitree-landing-page
-```
+cd handl-landing-page
 
-2. Install dependencies:
-```bash
+# install dependencies
 npm install
 # or
 yarn install
@@ -53,92 +52,69 @@ yarn install
 pnpm install
 # or
 bun install
-```
 
-3. Run the development server:
-```bash
+# run locally
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the landing page.
+Open [http://localhost:3000](http://localhost:3000) in your browser to preview the page.
 
 ## 📁 Project Structure
 
 ```
 ├── public/
-│   ├── logo_icon.png          # Splitree logo
-│   └── images/                # Static images
+│   ├── logo_icon.png          # Handl icon
+│   └── home_screen.jpeg       # App mockup used in the hero
 ├── src/
 │   └── app/
-│       ├── globals.css        # Global styles and Tailwind imports
-│       ├── layout.tsx         # Root layout component
-│       └── page.tsx           # Main landing page component
-├── tailwind.config.ts         # Tailwind CSS configuration
+│       ├── globals.css        # Tailwind layers + custom utilities
+│       ├── layout.tsx         # Root layout with font setup
+│       └── page.tsx           # Landing page markup & animations
+├── tailwind.config.ts         # Extended brand palette and tokens
 ├── next.config.ts             # Next.js configuration
-├── netlify.toml               # Netlify deployment configuration
-└── package.json               # Project dependencies and scripts
+└── package.json               # Scripts & dependencies
 ```
 
-## 🎨 Key Components
+## 🎨 Design Highlights
 
-### Hero Section
-- Animated hero text with gradient effects
-- Interactive "Coming Soon" badge
-- Animated app preview mockup
-- Floating notification elements
+- **Hero Section**
+  - “Beta Now Available” badge
+  - Floating iPhone mockup with layered orbs and animated cards
+  - Primary CTA linking directly to the beta form
+- **Steps Section**
+  - Four consistent cards describing the Handl flow (link, tap, snap, prompt)
+  - Visual mockups for each step with matched sizing
+- **Beta Signup Section**
+  - Gradient background, benefits grid, and a Google Forms CTA
+  - Live stats showing tester momentum
+- **Testimonials (Optional)**
+  - Commented-out block ready for real user quotes when available
 
-### How It Works Section
-- Interactive step selector
-- Animated step indicators
-- Dynamic content preview
-- Smooth transitions between steps
-
-### Features Section
-- Grid layout of app features
-- Hover animations on feature cards
-- Icon animations and effects
-
-## 📝 Scripts
+## 🔧 Scripts
 
 ```bash
 npm run dev      # Start development server
-npm run build    # Build for production
-npm run start    # Start production server
-npm run lint     # Run ESLint
+npm run build    # Bundle production assets
+npm run start    # Run production build locally
+npm run lint     # Check for lint issues
 ```
 
-## 🎯 Customization
+## 🎯 Customization Tips
 
-### Colors
-The app uses a green-focused color palette defined in `tailwind.config.ts`. You can customize the colors by modifying the `colors` section.
+- **Brand Colors & Tokens** – Adjust the `colors`, `boxShadow`, and `spacing` extensions in `tailwind.config.ts`.
+- **Copy & CTA Links** – Update headlines, supporting text, and the beta URL in `src/app/page.tsx`.
+- **Animations** – Fine-tune Framer Motion easing, durations, and delays within the component.
 
-### Animations
-Animations are handled by Framer Motion. You can customize animation timing, easing, and effects in the component files.
+## 📱 About Handl
 
-### Content
-Update the landing page content by editing the arrays and text in `src/app/page.tsx`.
+Handl is the effortless way to keep groups financially in sync:
 
-## 🚀 Deployment
-
-This project is deployed on [Netlify](https://netlify.com) and is live at:
-**[https://splitree-landing.netlify.app/](https://splitree-landing.netlify.app/)**
-
-## 📱 About Splitree
-
-Splitree is an intelligent, real-time travel and group expense app that:
-
-- **Automates expense tracking** with card sync and receipt scanning
-- **Smart splitting** using AI to determine fair cost distribution
-- **Eliminates awkwardness** with automatic calculations and suggestions
-- **Optimizes settlements** to minimize the number of transactions needed
-- **Provides real-time updates** so everyone stays in sync
+- Link a card once and auto-track shared expenses
+- Tap any transaction and split without manual entry
+- Snap receipts for cash purchases and let OCR do the work
+- Type natural language prompts when you need a custom split
+- Settle up without awkward back-and-forth
 
 ---
 
-Built with ❤️ using Next.js, Tailwind CSS, and Framer Motion.
+Built with ❤️ for the Handl beta launch using Next.js, Tailwind CSS, and Framer Motion. 💚

@@ -1,562 +1,772 @@
 'use client'
 
-import { ArrowRightIcon, CreditCardIcon, BellIcon, CalculatorIcon, UserGroupIcon, DocumentTextIcon, ChartBarIcon, UserIcon, ChatBubbleLeftIcon } from '@heroicons/react/24/outline'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState } from 'react'
+import { 
+  BellIcon, 
+  UserGroupIcon, 
+  CreditCardIcon, 
+  SparklesIcon,
+  CheckCircleIcon,
+  ArrowRightIcon
+} from '@heroicons/react/24/outline'
 
 export default function Home() {
-  const [activeStep, setActiveStep] = useState(0)
-
-  const scrollToHowItWorks = () => {
-    const section = document.getElementById('how-it-works')
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id)
     section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed w-full bg-white/80 backdrop-blur-lg z-50 border-b border-gray-100">
-        <div className="container-custom py-3 sm:py-4">
+      <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
+
+        <div className="container-custom py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 sm:gap-2.5">
+            <div className="flex items-center gap-2">
               <Image
                 src="/logo_icon.png" 
-                alt="Splitree Logo" 
-                width={32} 
-                height={32}
-                className="w-8 h-8 sm:w-10 sm:h-10"
+                alt="Handl Logo" 
+                width={40} 
+                height={40}
+                className="w-10 h-10"
               />
-              <span className="text-lg sm:text-[1.75rem] font-semibold tracking-wider text-primary-black">Splitree</span>
+              <span className="text-2xl font-bold tracking-tight text-brand-primary font-nunito leading-none">Handl</span>
             </div>
-            <div className="hidden sm:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-8">
               <button 
-                onClick={scrollToHowItWorks}
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-              >
-                How it Works
-              </button>
-              <button 
-                onClick={() => {
-                  const section = document.getElementById('features')
-                  section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }}
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                onClick={() => scrollToSection('features')}
+                className="text-brand-text-secondary hover:text-brand-primary font-medium transition-colors"
               >
                 Features
               </button>
+              <button 
+                onClick={() => scrollToSection('features')}
+                className="text-brand-text-secondary hover:text-brand-primary font-medium transition-colors"
+              >
+                How It Works
+              </button>
+              <a 
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-2.5 rounded-xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
+              >
+                Join Beta
+              </a>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12 md:pb-16 relative overflow-hidden">
-        <div className="absolute inset-0 noise-bg opacity-75"></div>
-        {/* Decorative elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 -right-1/2 w-[600px] sm:w-[800px] md:w-[1000px] h-[600px] sm:h-[800px] md:h-[1000px] rounded-full bg-gradient-to-br from-green-500/10 to-green-600/5"></div>
-          <div className="absolute -bottom-1/2 -left-1/2 w-[600px] sm:w-[800px] md:w-[1000px] h-[600px] sm:h-[800px] md:h-[1000px] rounded-full bg-gradient-to-tr from-green-500/10 to-green-600/5"></div>
-        </div>
+      <section className="pt-20 sm:pt-24 md:pt-28 pb-10 sm:pb-14 md:pb-18 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute inset-0 gradient-mesh"></div>
+        <div className="absolute inset-0 noise-bg"></div>
+        
         <div className="container-custom relative">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Column - Content */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-center lg:text-left"
+              transition={{ duration: 0.6 }}
+              className="text-center lg:text-left z-10"
             >
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-green-50 text-green-600 mb-4 sm:mb-6">
-                <Image
-                  src="/logo_icon.png" 
-                  alt="Splitree Icon" 
-                  width={16}
-                  height={16}
-                  className="w-4 h-4 sm:w-5 sm:h-5"
-                />
-                <span className="text-xs sm:text-sm font-medium">Coming Soon</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-icon-bg-light border border-brand-border-subtle mb-6">
+            <SparklesIcon className="w-5 h-5 text-brand-primary" />
+            <span className="text-sm font-semibold text-brand-primary">Beta Now Available • Join Early Access</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-                We automate the <span className="text-gradient">awkward</span> —{' '}
-                <br className="block sm:hidden"/>
-                so you can split costs, not time.
+              
+              <h1 className="heading-xl mb-6 text-brand-primary">
+                Split Expenses,<br/>
+                Not <span className="text-gradient">Friendships</span>
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0">
-                The intelligent, real-time travel and group expense app designed to make 
-                splitting costs seamless, automatic, and emotionally effortless.
+              
+              <p className="text-xl md:text-2xl text-brand-text-secondary mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                The intelligent expense sharing app that makes splitting costs seamless, 
+                automatic, and stress-free. No more awkward money conversations.
               </p>
-              <div className="flex items-center justify-center lg:justify-start">
-                <button onClick={scrollToHowItWorks} className="btn-secondary text-sm sm:text-base">
-                  Learn More
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <a 
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary w-full sm:w-auto group"
+                >
+                  Join the Beta
+                  <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+                <button 
+                  onClick={() => scrollToSection('features')}
+                  className="btn-secondary w-full sm:w-auto"
+                >
+                  See How It Works
                 </button>
+              </div>
+
+              {/* Stats */}
+              <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold text-brand-primary">Beta</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Live Now</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold text-brand-primary">2s</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Avg Split Time</div>
+                </div>
+                <div className="text-center lg:text-left">
+                  <div className="text-3xl font-bold text-brand-primary">4</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Simple Steps</div>
+                </div>
               </div>
             </motion.div>
 
+            {/* Right Column - iPhone Mockup */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative"
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="relative flex justify-center lg:justify-end"
             >
-              <div className="relative w-full aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-tr from-green-500/5 to-green-600/10 p-4 sm:p-6 md:p-8">
-                <div className="absolute inset-0 bg-white/40 backdrop-blur-xl"></div>
-                <div className="relative h-full rounded-lg sm:rounded-xl overflow-hidden shadow-xl sm:shadow-2xl border border-gray-100">
-                  <div className="absolute inset-0 bg-white flex items-center justify-center">
-                    <div className="space-y-6 sm:space-y-8 w-full p-4 sm:p-6">
-                      {/* App Header */}
-                      <div className="flex items-center justify-between border-b border-gray-100 pb-3 sm:pb-4">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <UserIcon className="w-4 h-4 sm:w-6 sm:h-6 text-green-600" />
+              {/* Floating elements behind iPhone */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, 0]
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                className="absolute w-64 h-64 rounded-full bg-brand-primary/10 blur-3xl"
+                />
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                    rotate: [0, -5, 0]
+                  }}
+                  transition={{ 
+                    duration: 5, 
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1
+                  }}
+                  className="absolute w-72 h-72 rounded-full bg-brand-success-soft/25 blur-3xl"
+                />
                           </div>
-                          <div>
-                            <div className="h-2 sm:h-3 w-16 sm:w-24 bg-gray-900 rounded"></div>
-                            <div className="h-1.5 sm:h-2 w-12 sm:w-16 bg-gray-400 rounded mt-1"></div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                            <BellIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" />
-                          </div>
-                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-green-100 flex items-center justify-center">
-                            <ChatBubbleLeftIcon className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
-                          </div>
-                        </div>
+
+              {/* iPhone Frame */}
+              <div className="relative z-10">
+                <div className="iphone-frame w-[280px] sm:w-[320px] lg:w-[360px] aspect-[9/19.5]">
+                  {/* Notch */}
+                  <div className="iphone-notch z-20"></div>
+                  
+                  {/* Screen Content */}
+                  <div className="iphone-screen">
+                    <Image
+                      src="/home_screen.jpeg"
+                      alt="Handl App Home Screen"
+                      width={390}
+                      height={844}
+                      className="w-full h-full object-cover"
+                      priority
+                    />
                       </div>
 
-                      {/* Transaction List */}
-                      <div className="space-y-3 sm:space-y-4">
-                        <div className="flex items-center justify-between p-2 sm:p-3 bg-green-50 rounded-md sm:rounded-lg">
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 flex items-center justify-center">
-                              <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                  {/* Side button */}
+                  <div className="absolute -right-1 top-24 w-1 h-12 bg-gray-800 rounded-l-sm"></div>
+                  <div className="absolute -left-1 top-20 w-1 h-8 bg-gray-800 rounded-r-sm"></div>
+                  <div className="absolute -left-1 top-32 w-1 h-12 bg-gray-800 rounded-r-sm"></div>
                             </div>
-                            <div>
-                              <div className="h-2 sm:h-3 w-24 sm:w-32 bg-green-600 rounded"></div>
-                              <div className="h-1.5 sm:h-2 w-16 sm:w-24 bg-green-500/50 rounded mt-1"></div>
-                            </div>
-                          </div>
-                          <div className="text-sm sm:text-base text-green-600 font-medium">$24.50</div>
-                        </div>
-                        <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-md sm:rounded-lg">
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                              <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
-                            </div>
-                            <div>
-                              <div className="h-2 sm:h-3 w-20 sm:w-28 bg-gray-400 rounded"></div>
-                              <div className="h-1.5 sm:h-2 w-14 sm:w-20 bg-gray-300 rounded mt-1"></div>
-                            </div>
-                          </div>
-                          <div className="text-sm sm:text-base text-gray-600 font-medium">$18.75</div>
-                        </div>
-                      </div>
 
-                      {/* Quick Actions */}
-                      <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                        <button className="flex items-center justify-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-md sm:rounded-lg bg-green-500 text-white text-sm sm:text-base font-medium">
-                          <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                          <span>Split Now</span>
-                        </button>
-                        <button className="flex items-center justify-center gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-md sm:rounded-lg bg-gray-100 text-gray-600 text-sm sm:text-base font-medium">
-                          <UserGroupIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-                          <span>New Group</span>
-                        </button>
-                      </div>
+                {/* Floating cards around iPhone */}
+                <FloatingCard 
+                  className="absolute -left-8 top-20 hidden xl:block"
+                  delay={0.5}
+                >
+                  <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-soft-2 border border-brand-border">
+                    <div className="w-10 h-10 rounded-xl bg-brand-success-soft/20 flex items-center justify-center">
+                      <CheckCircleIcon className="w-6 h-6 text-brand-success-soft" />
+                            </div>
+                            <div>
+                      <div className="text-sm font-semibold text-brand-primary">Split Complete</div>
+                      <div className="text-xs text-brand-text-secondary">Dinner paid</div>
                     </div>
                   </div>
-                </div>
-              </div>
-              {/* Floating elements */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="absolute -bottom-4 sm:-bottom-6 -right-4 sm:-right-6 bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-md sm:shadow-lg border border-gray-100"
-              >
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-50 flex items-center justify-center">
-                    <CreditCardIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+                </FloatingCard>
+
+                <FloatingCard 
+                  className="absolute -right-12 bottom-32 hidden xl:block"
+                  delay={0.8}
+                >
+                  <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-soft-2 border border-brand-border">
+                    <div className="w-10 h-10 rounded-xl bg-brand-icon-bg-light flex items-center justify-center">
+                      <BellIcon className="w-6 h-6 text-brand-primary" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-medium">Split Complete</div>
-                    <div className="text-[10px] sm:text-xs text-gray-500">Automatically processed</div>
+                      <div className="text-sm font-semibold text-brand-primary">Smart Reminder</div>
+                      <div className="text-xs text-brand-text-secondary">$45 from Sarah</div>
+                    </div>
                   </div>
+                </FloatingCard>
                 </div>
-              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden bg-gradient-to-b from-white to-gray-50">
-        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-        <div className="container-custom relative">
-          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 lg:mb-16">
+      {/* Features Section */}
+      <section id="features" className="py-16 md:py-20 bg-white relative">
+        <div className="container-custom">
+          <div className="text-center max-w-4xl mx-auto mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6">How Splitree Works</h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Experience seamless group expense management with our intelligent automation
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-200 mb-6">
+                <SparklesIcon className="w-5 h-5 text-primary-600" />
+                <span className="text-sm font-semibold text-primary-700">Splitting Made Simple</span>
+              </div>
+              <h2 className="heading-lg mb-6 text-brand-primary">
+                Four Simple Steps.
+                <span className="text-gradient block mt-2">Split Any Expense in Seconds.</span>
+              </h2>
+              <p className="text-xl text-brand-text-secondary max-w-3xl mx-auto">
+                Whether you're at dinner, on a trip, or sharing rent — Handl adapts to how you live. 
+                No spreadsheets, no awkward texts, no math.
               </p>
             </motion.div>
           </div>
 
-          <div className="flex flex-col gap-8 sm:gap-10 lg:gap-12 2xl:grid 2xl:grid-cols-2 2xl:gap-16">
-            {/* Steps Grid */}
-            <div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-1 gap-4 sm:gap-6">
-                {[
-                  { 
-                    number: '1',
-                    title: 'Create Your Group',
-                    description: 'Start by creating a group and inviting your friends'
-                  },
-                  {
-                    number: '2',
-                    title: 'Add Expenses',
-                    description: 'Snap receipts or connect your card for automatic tracking'
-                  },
-                  {
-                    number: '3',
-                    title: 'Smart Split',
-                    description: 'Let AI handle fair splits based on who benefited'
-                  },
-                  {
-                    number: '4',
-                    title: 'Settle Up',
-                    description: 'Review optimized transfers and settle with one tap'
-                  }
-                ].map((step, index) => (
-                  <StepSelector
-                    key={index}
-                    isActive={activeStep === index}
-                    onClick={() => setActiveStep(index)}
-                    {...step}
-                  />
-                ))}
+          {/* Feature Cards Grid */}
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {/* Feature 1: Link Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green flex flex-col bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
+            >
+              <div className="flex items-start gap-6 mb-6 flex-1">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <CreditCardIcon className="w-9 h-9 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 1</span>
+                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                  </div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
+                    Link Your Card Once
+                  </h3>
+                  <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
+                    Connect your credit or debit card in seconds. Handl automatically tracks every transaction.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                    <CheckCircleIcon className="w-5 h-5" />
+                    <span>100% secure • Bank-level encryption</span>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-brand-border mt-auto h-[90px] flex items-center">
+                <div className="flex items-center gap-3 w-full">
+                  <div className="w-14 h-9 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary/70 border border-brand-border flex flex-col justify-between p-2 text-white shadow-green">
+                    <div className="w-5 h-2 rounded-sm bg-white/70"></div>
+                    <div className="h-1 bg-white/75 rounded-full w-9"></div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
+                    <div className="h-1.5 w-32 bg-brand-border-subtle rounded"></div>
+                  </div>
+                  <CheckCircleIcon className="w-6 h-6 text-brand-primary" />
               </div>
             </div>
+            </motion.div>
 
-            {/* Step Content Preview */}
-            <div className="2xl:sticky 2xl:top-24">
-              <AnimatePresence mode="wait">
+            {/* Feature 2: Tap Transaction */}
                 <motion.div
-                  key={activeStep}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-white rounded-xl sm:rounded-2xl border border-gray-200 shadow-lg sm:shadow-xl overflow-hidden w-full"
-                >
-                  {Number(activeStep) === 0 && (
-                    <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
-                      <div className="flex items-center gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
-                        <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-green-50 flex items-center justify-center">
-                          <UserGroupIcon className="w-4 sm:w-5 h-4 sm:h-5 text-green-600" />
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
+            >
+              <div className="flex items-start gap-6 mb-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 2</span>
+                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                  </div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
+                    Tap Any Transaction
+                  </h3>
+                  <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
+                    See a charge that needs splitting? Just tap it. We autofill the data, making your split easy.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                    <CheckCircleIcon className="w-5 h-5" />
+                    <span>Instant automation • Zero effort</span>
+                  </div>
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-sm sm:text-base">Summer Trip 2025</h4>
-                          <p className="text-xs sm:text-sm text-gray-500">4 members</p>
                         </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border h-[90px] flex items-center">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
+                      <span className="text-lg">🍽️</span>
                       </div>
-                      <div className="grid gap-2 sm:gap-3">
-                        {[
-                          { name: 'Alex Kim', status: 'Admin', avatar: '👨🏻‍💻' },
-                          { name: 'Sarah Chen', status: 'Joined', avatar: '👩🏻‍💼' },
-                          { name: 'Mike Peters', status: 'Pending', avatar: '👨🏼‍💼' },
-                        ].map((member, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 sm:p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-white flex items-center justify-center text-sm sm:text-base">
-                                {member.avatar}
-                              </div>
-                              <span className="font-medium text-sm sm:text-base">{member.name}</span>
-                            </div>
-                            <span className={`text-xs sm:text-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full ${
-                              member.status === 'Pending' ? 'bg-gray-200 text-gray-600' : 'bg-green-100 text-green-600'
-                            }`}>
-                              {member.status}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                    <div>
+                      <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
+                      <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
                     </div>
-                  )}
+                        </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-brand-primary">$84.50</div>
+                    <div className="text-xs text-brand-primary font-semibold">Tap to split →</div>
+                        </div>
+                      </div>
+                              </div>
+            </motion.div>
 
-                  {Number(activeStep) === 1 && (
-                    <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
-                      <div className="flex items-center gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
-                        <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-green-50 flex items-center justify-center">
-                          <DocumentTextIcon className="w-4 sm:w-5 h-4 sm:h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-sm sm:text-base">Recent Expenses</h4>
-                          <p className="text-xs sm:text-sm text-gray-500">Last 24 hours</p>
-                        </div>
-                      </div>
-                      <div className="grid gap-2 sm:gap-3">
-                        {[
-                          { title: 'Dinner at Ocean View', amount: '$120.00', split: '4 people', icon: '🍽️' },
-                          { title: 'Uber to Beach', amount: '$45.00', split: '3 people', icon: '🚗' },
-                          { title: 'Groceries', amount: '$89.50', split: '4 people', icon: '🛒' },
-                        ].map((expense, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 sm:p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-white flex items-center justify-center text-sm sm:text-base">
-                                {expense.icon}
-                              </div>
-                              <div>
-                                <p className="font-medium text-sm sm:text-base">{expense.title}</p>
-                                <p className="text-xs sm:text-sm text-gray-500">Split between {expense.split}</p>
+            {/* Feature 3: Upload Receipt */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
+            >
+              <div className="flex items-start gap-6 mb-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                               </div>
                             </div>
-                            <span className="font-medium text-sm sm:text-base">{expense.amount}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 3</span>
+                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
                           </div>
-                        ))}
+                  <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
+                    Snap a Receipt
+                  </h3>
+                  <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
+                    Paid cash? No problem. Take a photo of any receipt and Handl instantly reads all the items 
+                    and amounts using OCR technology.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                    <CheckCircleIcon className="w-5 h-5" />
+                    <span>OCR-powered • Works with any receipt</span>
                       </div>
                     </div>
-                  )}
+                        </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-brand-border min-h-[180px] flex">
+                <div className="bg-white rounded-xl px-4 py-3 space-y-3 w-full h-full flex flex-col justify-between">
+                  <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                    <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span className="text-xs font-semibold text-brand-primary">Receipt</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Burger x2</span>
+                      <span className="font-semibold text-brand-primary">$24.00</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Fries x3</span>
+                      <span className="font-semibold text-brand-primary">$12.00</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-600">Drinks x2</span>
+                      <span className="font-semibold text-brand-primary">$8.00</span>
+                    </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-600">Dessert x1</span>
+                        <span className="font-semibold text-brand-primary">$6.00</span>
+                      </div>
+                    <div className="flex justify-between text-xs pt-2 border-t border-gray-100">
+                      <span className="font-bold text-brand-primary">Total</span>
+                        <span className="font-bold text-brand-primary">$50.00</span>
+                    </div>
+                        </div>
+                      </div>
+                              </div>
+            </motion.div>
 
-                  {Number(activeStep) === 2 && (
-                    <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
-                      <div className="flex items-center gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
-                        <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-green-50 flex items-center justify-center">
-                          <CalculatorIcon className="w-4 sm:w-5 h-4 sm:h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-sm sm:text-base">Smart Split Suggestions</h4>
-                          <p className="text-xs sm:text-sm text-gray-500">AI-powered split recommendations</p>
-                        </div>
-                      </div>
-                      <div className="grid gap-2 sm:gap-3">
-                        <div className="p-3 sm:p-4 rounded-lg bg-gray-50">
-                          <div className="flex items-center justify-between mb-3 sm:mb-4">
-                            <div className="flex items-center gap-2 sm:gap-3">
-                              <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-white flex items-center justify-center text-sm sm:text-base">
-                                🍽️
-                              </div>
-                              <div>
-                                <p className="font-medium text-sm sm:text-base">Dinner at Ocean View</p>
-                                <p className="text-xs sm:text-sm text-gray-500">Total: $120.00</p>
+            {/* Feature 4: AI Prompt */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
+            >
+              <div className="flex items-start gap-6 mb-6">
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <SparklesIcon className="w-9 h-9 text-white" />
                               </div>
                             </div>
-                            <button className="text-xs sm:text-sm px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-green-100 text-green-600">
-                              Accept All
-                            </button>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 4</span>
+                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
                           </div>
-                          <div className="space-y-2 sm:space-y-3">
-                            {[
-                              { name: 'Alex Kim', amount: '$35.00', items: 'Steak + Drinks' },
-                              { name: 'Sarah Chen', amount: '$28.50', items: 'Pasta + Salad' },
-                              { name: 'Mike Peters', amount: '$31.50', items: 'Fish + Wine' },
-                              { name: 'You', amount: '$25.00', items: 'Pizza + Soda' },
-                            ].map((split, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 rounded-md bg-white">
-                                <div className="flex items-center gap-1.5 sm:gap-2">
-                                  <span className="font-medium text-sm sm:text-base">{split.name}</span>
-                                  <span className="text-xs sm:text-sm text-gray-500">({split.items})</span>
-                                </div>
-                                <span className="font-medium text-sm sm:text-base">{split.amount}</span>
-                              </div>
-                            ))}
+                  <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
+                    Write a Prompt
+                  </h3>
+                  <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
+                    Want a custom split? Just type what you want in plain English and Handl automatically 
+                    calculates everyone's share instantly.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                    <SparklesIcon className="w-5 h-5" />
+                    <span>Natural language AI • Unlimited flexibility</span>
                           </div>
                         </div>
+                      </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-brand-border min-h-[180px] flex">
+                <div className="space-y-3 w-full h-full flex flex-col justify-between">
+                  {/* Prompt Input */}
+                  <div className="bg-white rounded-xl p-3 border border-gray-200">
+                    <div className="flex items-center gap-2 mb-2">
+                      <svg className="w-4 h-4 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      <span className="text-xs font-semibold text-brand-text-tertiary">Your prompt:</span>
+                    </div>
+                    <div className="text-sm text-brand-text-secondary italic pl-6">
+                      "Split evenly but Sarah pays 30%"
+                    </div>
+                  </div>
+                  
+                  {/* Auto-calculated Results */}
+                  <div className="bg-brand-icon-bg-light rounded-xl p-3 border border-brand-border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CheckCircleIcon className="w-4 h-4 text-brand-primary" />
+                      <span className="text-xs font-bold text-brand-primary">Auto-calculated</span>
+                        </div>
+                    <div className="space-y-1 pl-6">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-brand-text-secondary">Sarah</span>
+                        <span className="font-semibold text-brand-primary">$13.20</span>
+                        </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-brand-text-secondary">Mike</span>
+                        <span className="font-semibold text-brand-primary">$15.40</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-brand-text-secondary">You</span>
+                        <span className="font-semibold text-brand-primary">$15.40</span>
                       </div>
                     </div>
-                  )}
-
-                  {Number(activeStep) === 3 && (
-                    <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4">
-                      <div className="flex items-center gap-3 sm:gap-4 border-b border-gray-100 pb-3 sm:pb-4">
-                        <div className="w-8 sm:w-10 h-8 sm:h-10 rounded-full bg-green-50 flex items-center justify-center">
-                          <ChartBarIcon className="w-4 sm:w-5 h-4 sm:h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-sm sm:text-base">Settlement Summary</h4>
-                          <p className="text-xs sm:text-sm text-gray-500">Optimized transfers</p>
-                        </div>
-                      </div>
-                      <div className="grid gap-3 sm:gap-4">
-                        {[
-                          { from: 'Sarah Chen', to: 'Alex Kim', amount: '$58.25', method: 'Venmo' },
-                          { from: 'Mike Peters', to: 'Sarah Chen', amount: '$32.75', method: 'PayPal' },
-                        ].map((transfer, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 sm:p-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
-                            <div className="flex items-center gap-2 sm:gap-4">
-                              <div className="flex items-center">
-                                <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-white flex items-center justify-center text-sm sm:text-base">
-                                  👤
-                                </div>
-                                <ArrowRightIcon className="w-3 sm:w-4 h-3 sm:h-4 mx-1.5 sm:mx-2 text-gray-400" />
-                                <div className="w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-white flex items-center justify-center text-sm sm:text-base">
-                                  👤
-                                </div>
-                              </div>
-                              <div>
-                                <p className="font-medium text-sm sm:text-base">{transfer.from}</p>
-                                <p className="text-xs sm:text-sm text-gray-500">pays {transfer.to} via {transfer.method}</p>
-                              </div>
-                            </div>
-                            <span className="font-medium text-sm sm:text-base text-green-600">{transfer.amount}</span>
-                          </div>
-                        ))}
-                        <button className="btn-primary w-full mt-1 sm:mt-2 text-sm sm:text-base py-2 sm:py-2.5" disabled>
-                          Settle All Balances
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
+                  </div>
             </div>
           </div>
+            </motion.div>
+                              </div>
+
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-16 sm:py-20 md:py-24">
-        <div className="container-custom">
-          <div className="text-center mb-12 sm:mb-16">
+      {/* Beta Signup Section */}
+      <section id="beta-signup" className="py-18 md:py-24 bg-gradient-to-br from-brand-primary via-pine to-brand-success-soft relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+            backgroundSize: '40px 40px'
+          }}></div>
+        </div>
+        
+        <div className="container-custom relative">
+          <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="text-center mb-12"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">Smart Features</h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600">Everything you need for seamless group expenses</p>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6">
+                <SparklesIcon className="w-5 h-5 text-white" />
+                <span className="text-sm font-semibold text-white">Limited Beta Access</span>
+              </div>
+              
+              <h2 className="heading-lg text-white mb-6">
+                Join the Handl Beta
+              </h2>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto mb-12">
+                Be among the first to experience the future of expense splitting. 
+                Get early access, help shape the product, and never worry about splitting bills again.
+              </p>
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl"
+            >
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
+                    <CheckCircleIcon className="w-6 h-6 text-primary-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Early Access Features</h3>
+                    <p className="text-sm text-brand-text-secondary">Get all features before public launch</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-teal/10 flex items-center justify-center">
+                    <UserGroupIcon className="w-6 h-6 text-accent-teal" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Shape the Product</h3>
+                    <p className="text-sm text-brand-text-secondary">Your feedback directly impacts development</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center">
+                    <SparklesIcon className="w-6 h-6 text-brand-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Priority Support</h3>
+                    <p className="text-sm text-brand-text-secondary">Direct line to our team for help</p>
+                  </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            {[
-              {
-                icon: CreditCardIcon,
-                title: "Card Sync",
-                description: "Add your card once and let Splitree automatically track and match transactions to your groups."
-              },
-              {
-                icon: BellIcon,
-                title: "Smart Notifications",
-                description: "Get contextual prompts and gentle reminders exactly when you need them."
-              },
-              {
-                icon: CalculatorIcon,
-                title: "Quick Split",
-                description: "Split expenses instantly with our intuitive interface and smart suggestions."
-              },
-              {
-                icon: UserGroupIcon,
-                title: "Group Management",
-                description: "Create and manage trip or event groups effortlessly with our lightweight system."
-              },
-              {
-                icon: DocumentTextIcon,
-                title: "Receipt Scanning",
-                description: "Scan receipts instantly with OCR technology for accurate expense tracking."
-              },
-              {
-                icon: ChartBarIcon,
-                title: "Trip Summaries",
-                description: "Get beautiful, auto-generated summaries of your shared expenses."
-              }
-            ].map((feature, index) => (
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Exclusive Perks</h3>
+                    <p className="text-sm text-brand-text-secondary">Special benefits for early adopters</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-200 pt-8">
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-brand-primary mb-4 font-nunito">Ready to Get Started?</h3>
+                  <p className="text-brand-text-secondary mb-6">
+                    Sign up now and we'll send you an invite to join the beta
+                  </p>
+                  
+                  <div className="max-w-md mx-auto">
+                    <a 
+                      href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-full px-8 py-4 rounded-2xl bg-brand-primary text-white font-bold text-lg hover:bg-pine-alt transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group"
+                    >
+                      Join the Beta Waitlist
+                      <ArrowRightIcon className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                    <p className="text-xs text-brand-text-tertiary mt-4">
+                      By signing up, you agree to our{" "}
+                      <a href="/terms" className="underline hover:text-brand-primary">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href="/privacy" className="underline hover:text-brand-primary">
+                        Privacy Policy
+                      </a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Stats */}
               <motion.div
-                key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="p-4 sm:p-6 rounded-lg sm:rounded-xl border border-gray-200 hover:border-green-100 group"
-              >
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-green-50 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
-                  <feature.icon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="mt-12 grid grid-cols-3 gap-6 max-w-2xl mx-auto"
+            >
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">100+</div>
+                <div className="text-sm text-white/80">Beta Testers</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">iOS</div>
+                <div className="text-sm text-white/80">TestFlight Ready</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">⭐️</div>
+                <div className="text-sm text-white/80">Early Feedback</div>
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">{feature.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600">{feature.description}</p>
               </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      {/* <section className="py-16 sm:py-20 md:py-24 bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden">
-        <div className="absolute inset-0 noise-bg opacity-75"></div>
-        <div className="container-custom relative">
-          <div className="max-w-3xl mx-auto text-center">
+      {/* Testimonial / Social Proof Section */}
+      {/* <section className="py-20 md:py-28 bg-white relative">
+        <div className="container-custom">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 md:mb-6">Ready to simplify group expenses?</h2>
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">
-                Start managing your shared expenses with Splitree today.
-              </p>
-              <button className="btn-primary text-sm sm:text-base">
-                Get Started <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 ml-1.5 sm:ml-2" />
+            className="text-center max-w-4xl mx-auto"
+          >
+            <h2 className="heading-lg text-brand-primary mb-6">
+              Early Users Love Handl
+            </h2>
+            <p className="text-xl text-brand-text-secondary mb-12">
+              See what beta testers are saying about their experience
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                {
+                  quote: "Finally, an app that makes splitting bills actually enjoyable. No more awkward Venmo requests!",
+                  author: "Sarah M.",
+                  role: "Beta Tester"
+                },
+                {
+                  quote: "The receipt scanning feature is a game-changer. Saves me so much time after group dinners.",
+                  author: "Mike T.",
+                  role: "Early Adopter"
+                },
+                {
+                  quote: "Love how it just works. Link card, tap transaction, done. That's exactly what I needed.",
+                  author: "Alex K.",
+                  role: "Beta User"
+                }
+              ].map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="bg-cream-panel rounded-2xl p-6 border border-brand-border"
+                >
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-brand-accent" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-brand-text-secondary italic mb-4">"{testimonial.quote}"</p>
+                  <div className="text-sm">
+                    <div className="font-bold text-brand-primary">{testimonial.author}</div>
+                    <div className="text-brand-text-tertiary">{testimonial.role}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+            
+            <div className="mt-12">
+              <button 
+                onClick={() => scrollToSection('beta-signup')}
+                className="btn-primary"
+              >
+                Join the Beta Today
+                <ArrowRightIcon className="w-5 h-5 ml-2" />
               </button>
+            </div>
             </motion.div>
-          </div>
         </div>
       </section> */}
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-100 py-4 sm:py-6">
+      <footer className="bg-brand-primary border-t border-pine-alt py-12">
         <div className="container-custom">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
               <Image
                 src="/logo_icon.png" 
-                alt="Splitree Logo" 
-                width={24} 
-                height={24}
-                className="w-6 h-6"
+                alt="Handl Logo" 
+                width={32} 
+                height={32}
+                className="w-8 h-8"
               />
-              <span className="text-base font-semibold text-gray-900">Splitree</span>
+              <span className="text-xl font-bold text-white font-nunito">Handl</span>
             </div>
-            <div className="text-sm text-gray-500">
-              © {new Date().getFullYear()} Splitree. All rights reserved.
+            
+            <div className="flex items-center gap-8">
+              <a href="/privacy" className="text-white/80 hover:text-white transition-colors">
+                Privacy
+              </a>
+              <a href="/terms" className="text-white/80 hover:text-white transition-colors">
+                Terms
+              </a>
+              <button className="text-white/80 hover:text-white transition-colors">
+                Contact
+              </button>
             </div>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t border-white/10 text-center">
+            <p className="text-white/60 text-sm">
+              © {new Date().getFullYear()} Handl. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>
     </main>
   )
 }
-interface StepSelectorProps {
-  number: string;
-  title: string;
-  description: string;
-  isActive: boolean;
-  onClick: () => void;
+
+// Floating Card Component
+interface FloatingCardProps {
+  children: React.ReactNode
+  className?: string
+  delay?: number
 }
 
-const StepSelector: React.FC<StepSelectorProps> = ({ number, title, description, isActive, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`text-left p-3 sm:p-4 rounded-lg sm:rounded-xl border h-full transition-all duration-200 ${
-      isActive 
-        ? 'border-green-500 bg-green-50/50 shadow-md sm:shadow-lg shadow-green-500/10 scale-[1.02]' 
-        : 'border-gray-200 hover:border-green-200 hover:bg-gray-50 hover:scale-[1.02]'
-    }`}
-  >
-    <div className="flex items-start gap-2 sm:gap-3 h-full">
-      <div className={`flex-shrink-0 flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full text-xs sm:text-sm font-semibold ${
-        isActive ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-600'
-      }`}>
-        {number}
-      </div>
-      <div className="flex-1 flex flex-col">
-        <h3 className="text-sm sm:text-base font-semibold mb-0.5 sm:mb-1">{title}</h3>
-        <p className="text-xs sm:text-sm text-gray-600 flex-1">{description}</p>
-      </div>
-    </div>
-  </button>
-);
-
+const FloatingCard: React.FC<FloatingCardProps> = ({ children, className = '', delay = 0 }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.5 }}
+      className={className}
+    >
+      <motion.div
+        animate={{ y: [0, -10, 0] }}
+        transition={{ 
+          duration: 3, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  )
+}
