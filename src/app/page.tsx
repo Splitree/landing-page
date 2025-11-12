@@ -23,9 +23,9 @@ export default function Home() {
       <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
         <div 
           className="block sm:hidden bg-white" 
-          style={{ height: 'max(env(safe-area-inset-top), 24px)' }}
+          style={{ height: 'env(safe-area-inset-top, 0px)' }}
         ></div>
-        <div className="container-custom py-4">
+        <div className="container-custom py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
               <Image
@@ -282,9 +282,9 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-brand-border mt-auto flex flex-col sm:flex-row sm:items-center gap-3 text-center sm:text-left">
-                <div className="flex items-center gap-3 w-full justify-center sm:justify-start">
-                  <div className="w-14 h-9 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary/70 border border-brand-border flex flex-col justify-between p-2 text-white shadow-green mx-auto sm:mx-0">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-brand-border mt-auto flex items-center gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-14 h-9 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary/70 border border-brand-border flex flex-col justify-between p-2 text-white shadow-green">
                     <div className="w-5 h-2 rounded-sm bg-white/70"></div>
                     <div className="h-1 bg-white/75 rounded-full w-9"></div>
                   </div>
@@ -293,9 +293,7 @@ export default function Home() {
                     <div className="h-1.5 w-32 bg-brand-border-subtle rounded"></div>
                   </div>
                 </div>
-                <div className="flex justify-center sm:justify-end w-full sm:w-auto">
-                  <CheckCircleIcon className="w-6 h-6 text-brand-primary" />
-                </div>
+                <CheckCircleIcon className="w-6 h-6 text-brand-primary flex-shrink-0" />
               </div>
             </motion.div>
 
@@ -332,8 +330,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border flex flex-col sm:flex-row sm:items-center gap-4">
-                <div className="flex items-center justify-center sm:justify-start w-full gap-3">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border flex items-center gap-4">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
                     <span className="text-lg">🍽️</span>
                   </div>
@@ -342,9 +340,9 @@ export default function Home() {
                     <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
                   </div>
                 </div>
-                <div className="text-center sm:text-right w-full sm:w-auto">
+                <div className="text-right whitespace-nowrap">
                   <div className="text-sm font-bold text-brand-primary">$84.50</div>
-                  <div className="text-xs text-brand-primary font-semibold">Tap to split →</div>
+                  <div className="text-xs text-brand-primary font-semibold whitespace-nowrap">Tap to split →</div>
                 </div>
               </div>
             </motion.div>
