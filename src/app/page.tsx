@@ -21,7 +21,10 @@ export default function Home() {
     <main className="flex min-h-screen flex-col overflow-x-hidden">
       {/* Navigation */}
       <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
-
+        <div 
+          className="block sm:hidden bg-white" 
+          style={{ height: 'max(env(safe-area-inset-top), 24px)' }}
+        ></div>
         <div className="container-custom py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
@@ -256,16 +259,16 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green flex flex-col bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
             >
-              <div className="flex items-start gap-6 mb-6 flex-1">
-                <div className="flex-shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-6 flex-1 text-center sm:text-left">
+                <div className="flex-shrink-0 flex justify-center sm:justify-start">
                   <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <CreditCardIcon className="w-9 h-9 text-white" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
                     <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 1</span>
-                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                    <div className="hidden sm:block h-px flex-1 bg-brand-border-subtle"></div>
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
                     Link Your Card Once
@@ -273,15 +276,15 @@ export default function Home() {
                   <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
                     Connect your credit or debit card in seconds. Handl automatically tracks every transaction.
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-sm font-semibold text-brand-primary">
                     <CheckCircleIcon className="w-5 h-5" />
                     <span>100% secure • Bank-level encryption</span>
                   </div>
                 </div>
               </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-brand-border mt-auto h-[90px] flex items-center">
-                <div className="flex items-center gap-3 w-full">
-                  <div className="w-14 h-9 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary/70 border border-brand-border flex flex-col justify-between p-2 text-white shadow-green">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-3 border border-brand-border mt-auto flex flex-col sm:flex-row sm:items-center gap-3 text-center sm:text-left">
+                <div className="flex items-center gap-3 w-full justify-center sm:justify-start">
+                  <div className="w-14 h-9 rounded-lg bg-gradient-to-br from-brand-primary to-brand-primary/70 border border-brand-border flex flex-col justify-between p-2 text-white shadow-green mx-auto sm:mx-0">
                     <div className="w-5 h-2 rounded-sm bg-white/70"></div>
                     <div className="h-1 bg-white/75 rounded-full w-9"></div>
                   </div>
@@ -289,21 +292,23 @@ export default function Home() {
                     <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
                     <div className="h-1.5 w-32 bg-brand-border-subtle rounded"></div>
                   </div>
+                </div>
+                <div className="flex justify-center sm:justify-end w-full sm:w-auto">
                   <CheckCircleIcon className="w-6 h-6 text-brand-primary" />
+                </div>
               </div>
-            </div>
             </motion.div>
 
             {/* Feature 2: Tap Transaction */}
-                <motion.div
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
             >
-              <div className="flex items-start gap-6 mb-6">
-                <div className="flex-shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-6 text-center sm:text-left">
+                <div className="flex-shrink-0 flex justify-center sm:justify-start">
                   <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
@@ -311,9 +316,9 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
                     <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 2</span>
-                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                    <div className="hidden sm:block h-px flex-1 bg-brand-border-subtle"></div>
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
                     Tap Any Transaction
@@ -321,29 +326,27 @@ export default function Home() {
                   <p className="text-lg text-brand-text-secondary leading-relaxed mb-4">
                     See a charge that needs splitting? Just tap it. We autofill the data, making your split easy.
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-sm font-semibold text-brand-primary">
                     <CheckCircleIcon className="w-5 h-5" />
                     <span>Instant automation • Zero effort</span>
                   </div>
-                        </div>
-                        </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border h-[90px] flex items-center">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
-                      <span className="text-lg">🍽️</span>
-                      </div>
-                    <div>
-                      <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
-                      <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
-                    </div>
-                        </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-brand-primary">$84.50</div>
-                    <div className="text-xs text-brand-primary font-semibold">Tap to split →</div>
-                        </div>
-                      </div>
-                              </div>
+                </div>
+              </div>
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border flex flex-col sm:flex-row sm:items-center gap-4">
+                <div className="flex items-center justify-center sm:justify-start w-full gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
+                    <span className="text-lg">🍽️</span>
+                  </div>
+                  <div>
+                    <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
+                    <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
+                  </div>
+                </div>
+                <div className="text-center sm:text-right w-full sm:w-auto">
+                  <div className="text-sm font-bold text-brand-primary">$84.50</div>
+                  <div className="text-xs text-brand-primary font-semibold">Tap to split →</div>
+                </div>
+              </div>
             </motion.div>
 
             {/* Feature 3: Upload Receipt */}
@@ -354,8 +357,8 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
             >
-              <div className="flex items-start gap-6 mb-6">
-                <div className="flex-shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-6 text-center sm:text-left">
+                <div className="flex-shrink-0 flex justify-center sm:justify-start">
                   <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <svg className="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -364,9 +367,9 @@ export default function Home() {
                               </div>
                             </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
                     <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 3</span>
-                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                    <div className="h-px hidden sm:block flex-1 bg-brand-border-subtle"></div>
                           </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
                     Snap a Receipt
@@ -375,7 +378,7 @@ export default function Home() {
                     Paid cash? No problem. Take a photo of any receipt and Handl instantly reads all the items 
                     and amounts using OCR technology.
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-sm font-semibold text-brand-primary">
                     <CheckCircleIcon className="w-5 h-5" />
                     <span>OCR-powered • Works with any receipt</span>
                       </div>
@@ -383,7 +386,7 @@ export default function Home() {
                         </div>
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-brand-border min-h-[180px] flex">
                 <div className="bg-white rounded-xl px-4 py-3 space-y-3 w-full h-full flex flex-col justify-between">
-                  <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 pb-2 border-b border-gray-100 text-center sm:text-left">
                     <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -423,16 +426,16 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="group relative rounded-3xl p-8 lg:p-10 border-2 border-brand-border/80 hover:border-brand-primary transition-all duration-300 shadow-soft-1 hover:shadow-green bg-gradient-to-br from-brand-card-bg via-cream-panel/50 to-brand-icon-bg-light"
             >
-              <div className="flex items-start gap-6 mb-6">
-                <div className="flex-shrink-0">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-6 mb-6 text-center sm:text-left">
+                <div className="flex-shrink-0 flex justify-center sm:justify-start">
                   <div className="w-16 h-16 rounded-2xl bg-brand-primary flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                     <SparklesIcon className="w-9 h-9 text-white" />
                               </div>
                             </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-2 justify-center sm:justify-start">
                     <span className="text-xs font-bold text-brand-primary uppercase tracking-wider">Step 4</span>
-                    <div className="h-px flex-1 bg-brand-border-subtle"></div>
+                    <div className="h-px hidden sm:block flex-1 bg-brand-border-subtle"></div>
                           </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-brand-primary mb-3 font-nunito">
                     Write a Prompt
@@ -441,7 +444,7 @@ export default function Home() {
                     Want a custom split? Just type what you want in plain English and Handl automatically 
                     calculates everyone&apos;s share instantly.
                   </p>
-                  <div className="flex items-center gap-2 text-sm font-semibold text-brand-primary">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-sm font-semibold text-brand-primary">
                     <SparklesIcon className="w-5 h-5" />
                     <span>Natural language AI • Unlimited flexibility</span>
                           </div>
@@ -451,7 +454,7 @@ export default function Home() {
                 <div className="space-y-3 w-full h-full flex flex-col justify-between">
                   {/* Prompt Input */}
                   <div className="bg-white rounded-xl p-3 border border-gray-200">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2 text-center sm:text-left">
                       <svg className="w-4 h-4 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
@@ -464,7 +467,7 @@ export default function Home() {
                   
                   {/* Auto-calculated Results */}
                   <div className="bg-brand-icon-bg-light rounded-xl p-3 border border-brand-border">
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2 text-center sm:text-left">
                       <CheckCircleIcon className="w-4 h-4 text-brand-primary" />
                       <span className="text-xs font-bold text-brand-primary">Auto-calculated</span>
                         </div>
