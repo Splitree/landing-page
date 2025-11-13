@@ -137,13 +137,13 @@ export default function Home() {
               </div>
               
               <h1 className="heading-xl mb-6 text-brand-primary">
-                Split Expenses,<br/>
-                Not <span className="text-gradient">Friendships</span>
+                <span className="inline-block whitespace-nowrap">Automate Expense</span>{' '}
+                with <span className="text-gradient inline-block whitespace-nowrap">AI</span>
               </h1>
               
               <p className="text-xl md:text-2xl text-brand-text-secondary mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                The intelligent expense sharing app that makes splitting costs seamless, 
-                automatic, and stress-free. No more awkward money conversations.
+                We&apos;re building the first hands-free OS for expense management, automating tracking, 
+                splitting, and settlement for everyday users.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -349,11 +349,11 @@ export default function Home() {
                   </div>
                 </div>
                 <CheckCircleIcon className="w-6 h-6 text-brand-primary flex-shrink-0" />
-              </div>
+            </div>
             </motion.div>
 
             {/* Feature 2: Tap Transaction */}
-            <motion.div
+                <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -383,23 +383,23 @@ export default function Home() {
                     <CheckCircleIcon className="w-5 h-5" />
                     <span>Instant automation • Zero effort</span>
                   </div>
-                </div>
-              </div>
+                        </div>
+                        </div>
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-3 py-2.5 border border-brand-border flex items-center gap-4">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
-                    <span className="text-lg">🍽️</span>
-                  </div>
-                  <div>
-                    <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
-                    <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
-                  </div>
-                </div>
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-primary/12 to-brand-primary/4 flex items-center justify-center ring-1 ring-brand-primary/10">
+                      <span className="text-lg">🍽️</span>
+                      </div>
+                    <div>
+                      <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
+                      <div className="h-1.5 w-16 bg-gray-300 rounded"></div>
+                    </div>
+                        </div>
                 <div className="text-right whitespace-nowrap">
-                  <div className="text-sm font-bold text-brand-primary">$84.50</div>
+                    <div className="text-sm font-bold text-brand-primary">$84.50</div>
                   <div className="text-xs text-brand-primary font-semibold whitespace-nowrap">Tap to split →</div>
-                </div>
-              </div>
+                      </div>
+                              </div>
             </motion.div>
 
             {/* Feature 3: Upload Receipt */}
@@ -691,21 +691,21 @@ export default function Home() {
                             'Submitting...'
                           ) : (
                             <>
-                              Join the Beta Waitlist
+                      Join the Beta Waitlist
                               <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
                             </>
                           )}
                         </button>
                         <p className="text-xs text-brand-text-tertiary mt-3 sm:mt-4 px-2">
-                          By signing up, you agree to our{" "}
-                          <a href="/terms" className="underline hover:text-brand-primary">
-                            Terms of Service
-                          </a>{" "}
-                          and{" "}
-                          <a href="/privacy" className="underline hover:text-brand-primary">
-                            Privacy Policy
-                          </a>
-                        </p>
+                      By signing up, you agree to our{" "}
+                      <a href="/terms" className="underline hover:text-brand-primary">
+                        Terms of Service
+                      </a>{" "}
+                      and{" "}
+                      <a href="/privacy" className="underline hover:text-brand-primary">
+                        Privacy Policy
+                      </a>
+                    </p>
                       </form>
                     )}
                   </div>
