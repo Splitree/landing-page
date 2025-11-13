@@ -7,6 +7,13 @@ const appDescription = "Smart, automatic bill splitting with AI. Manage expenses
 export const metadata: Metadata = {
   title: appTitle,
   description: appDescription,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0A1F1A' },
+  ],
+  appleWebApp: {
+    statusBarStyle: 'default',
+  },
   icons: {
     icon: { url: '/logo_icon.png', type: 'image/png' },
     shortcut: { url: '/logo_icon.png', type: 'image/png' },
@@ -43,6 +50,9 @@ export default function RootLayout({
       <html lang="en" className="scroll-smooth">
         <head>
         <link rel="icon" type="image/svg+xml" href="/logo_icon.svg" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#0A1F1A" media="(prefers-color-scheme: dark)" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         </head>
         <body className="antialiased font-sans bg-brand-background text-brand-text-primary">
           {/* Hidden form for Netlify to detect at build time */}
