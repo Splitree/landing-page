@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { 
@@ -12,9 +13,59 @@ import {
 } from '@heroicons/react/24/outline'
 
 export default function Home() {
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
-    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    if (section) {
+      // Responsive offset: smaller on mobile (to show form better), larger on desktop
+      const isMobile = window.innerWidth < 768
+      const offset = isMobile ? 90 : 80 // 0px on mobile (form at top), 80px on desktop
+      
+      const elementPosition = section.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
+    }
+  }
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      // Convert FormData to URLSearchParams for Netlify form submission
+      const params = new URLSearchParams()
+      formData.forEach((value, key) => {
+        params.append(key, value.toString())
+      })
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+      })
+
+      if (response.ok) {
+        setFormSubmitted(true)
+        form.reset()
+      } else {
+        console.error('Form submission failed')
+        alert('Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      alert('Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -50,14 +101,16 @@ export default function Home() {
               >
                 How It Works
               </button>
-              <a 
-                href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button 
+                onClick={() => {
+                  // On mobile, scroll to form section; on desktop, scroll to card top
+                  const isMobile = window.innerWidth < 768
+                  scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
+                }}
                 className="px-6 py-2.5 rounded-xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
               >
                 Join Beta
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -94,15 +147,17 @@ export default function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                <a 
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button 
+                  onClick={() => {
+                    // On mobile, scroll to form section; on desktop, scroll to card top
+                    const isMobile = window.innerWidth < 768
+                    scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
+                  }}
                   className="btn-primary w-full sm:w-auto group"
                 >
                   Join the Beta
                   <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </a>
+                </button>
                 <button 
                   onClick={() => scrollToSection('features')}
                   className="btn-secondary w-full sm:w-auto"
@@ -525,13 +580,14 @@ export default function Home() {
             </motion.div>
 
             <motion.div
+              id="beta-signup-form"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl"
+              className="bg-white rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl scroll-mt-20"
             >
-              <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
                     <CheckCircleIcon className="w-6 h-6 text-primary-600" />
@@ -575,33 +631,83 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-8">
+              <div id="ready-to-get-started" className="border-t border-gray-200 pt-8 mt-8 scroll-mt-20 sm:scroll-mt-24">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-brand-primary mb-4 font-nunito">Ready to Get Started?</h3>
-                    <p className="text-brand-text-secondary mb-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-brand-primary mb-3 sm:mb-4 font-nunito">Ready to Get Started?</h3>
+                    <p className="text-sm sm:text-base text-brand-text-secondary mb-4 sm:mb-6 px-4">
                       Sign up now and we&apos;ll send you an invite to join the beta
                   </p>
                   
-                  <div className="max-w-md mx-auto">
-                    <a 
-                      href="https://docs.google.com/forms/d/e/1FAIpQLSdSplD00Vv9FW8VrIJDBAlogBwyJZCqwbBiWKVPlloFeDTRNw/viewform" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center w-full px-8 py-4 rounded-2xl bg-brand-primary text-white font-bold text-lg hover:bg-pine-alt transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group"
-                    >
-                      Join the Beta Waitlist
-                      <ArrowRightIcon className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </a>
-                    <p className="text-xs text-brand-text-tertiary mt-4">
-                      By signing up, you agree to our{" "}
-                      <a href="/terms" className="underline hover:text-brand-primary">
-                        Terms of Service
-                      </a>{" "}
-                      and{" "}
-                      <a href="/privacy" className="underline hover:text-brand-primary">
-                        Privacy Policy
-                      </a>
-                    </p>
+                  <div className="max-w-md mx-auto px-4 sm:px-0">
+                    {formSubmitted ? (
+                      <div className="bg-brand-icon-bg-light rounded-2xl p-6 sm:p-8 border border-brand-border">
+                        <CheckCircleIcon className="w-12 h-12 sm:w-16 sm:h-16 text-brand-primary mx-auto mb-4" />
+                        <h4 className="text-xl sm:text-2xl font-bold text-brand-primary mb-2 font-nunito">Thanks for joining the Handl beta!</h4>
+                        <p className="text-sm sm:text-base text-brand-text-secondary">
+                          We&apos;ll be in touch soon with your invite.
+                        </p>
+                      </div>
+                    ) : (
+                      <form
+                        name="beta-signup"
+                        method="POST"
+                        data-netlify="true"
+                        onSubmit={handleFormSubmit}
+                        className="space-y-3 sm:space-y-4"
+                      >
+                        <input type="hidden" name="form-name" value="beta-signup" />
+                        <div>
+                          <label htmlFor="name" className="sr-only">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            required
+                            placeholder="Your name"
+                            className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-brand-border text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="email" className="sr-only">
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            placeholder="Your email"
+                            className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-brand-border text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base"
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="inline-flex items-center justify-center w-full px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-brand-primary text-white font-bold text-base sm:text-lg hover:bg-pine-alt transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none active:scale-[0.98]"
+                        >
+                          {isSubmitting ? (
+                            'Submitting...'
+                          ) : (
+                            <>
+                              Join the Beta Waitlist
+                              <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </>
+                          )}
+                        </button>
+                        <p className="text-xs text-brand-text-tertiary mt-3 sm:mt-4 px-2">
+                          By signing up, you agree to our{" "}
+                          <a href="/terms" className="underline hover:text-brand-primary">
+                            Terms of Service
+                          </a>{" "}
+                          and{" "}
+                          <a href="/privacy" className="underline hover:text-brand-primary">
+                            Privacy Policy
+                          </a>
+                        </p>
+                      </form>
+                    )}
                   </div>
                 </div>
               </div>
@@ -693,7 +799,11 @@ export default function Home() {
             
             <div className="mt-12">
               <button 
-                onClick={() => scrollToSection('beta-signup')}
+                onClick={() => {
+                  // On mobile, scroll to form section; on desktop, scroll to card top
+                  const isMobile = window.innerWidth < 768
+                  scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
+                }}
                 className="btn-primary"
               >
                 Join the Beta Today

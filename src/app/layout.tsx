@@ -21,7 +21,15 @@ export default function RootLayout({
         <head>
         <link rel="icon" type="image/svg+xml" href="/logo_icon.svg" />
         </head>
-        <body className="antialiased font-sans bg-brand-background text-brand-text-primary">{children}</body>
+        <body className="antialiased font-sans bg-brand-background text-brand-text-primary">
+          {/* Hidden form for Netlify to detect at build time */}
+          <form name="beta-signup" method="POST" data-netlify="true" hidden>
+            <input type="hidden" name="form-name" value="beta-signup" />
+            <input type="text" name="name" />
+            <input type="email" name="email" />
+          </form>
+          {children}
+        </body>
     </html>
   );
 }
