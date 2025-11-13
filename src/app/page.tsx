@@ -137,7 +137,7 @@ export default function Home() {
               </div>
               
               <h1 className="heading-xl mb-6 text-brand-primary">
-                <span className="inline-block whitespace-nowrap">Automate Expense</span>{' '}
+                <span className="inline-block whitespace-nowrap">Automate Expenses</span>{' '}
                 with <span className="text-gradient inline-block whitespace-nowrap">AI</span>
               </h1>
               
