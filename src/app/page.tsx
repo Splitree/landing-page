@@ -41,10 +41,16 @@ export default function Home() {
     const formData = new FormData(form)
 
     try {
+      // Convert FormData to URLSearchParams for Netlify form submission
+      const params = new URLSearchParams()
+      formData.forEach((value, key) => {
+        params.append(key, value.toString())
+      })
+
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as any).toString(),
+        body: params.toString(),
       })
 
       if (response.ok) {
