@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
   ArrowRightIcon
 } from '@heroicons/react/24/outline'
+import { supabase } from '@/lib/supabase'
 
 export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false)
@@ -40,29 +41,53 @@ export default function Home() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
+    // Extract form values
+    const name = formData.get('name')?.toString().trim()
+    const email = formData.get('email')?.toString().trim()
+
+    if (!name || !email) {
+      alert('Please fill in all fields.')
+      setIsSubmitting(false)
+      return
+    }
+
     try {
-      // Convert FormData to URLSearchParams for Netlify form submission
-      const params = new URLSearchParams()
-      formData.forEach((value, key) => {
-        params.append(key, value.toString())
-      })
-
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      })
-
-      if (response.ok) {
-        setFormSubmitted(true)
-        form.reset()
-      } else {
-        console.error('Form submission failed')
-        alert('Something went wrong. Please try again.')
+      // Verify Supabase client is initialized
+      if (!supabase) {
+        throw new Error('Supabase client not initialized. Check your environment variables.')
       }
+
+      // Insert into Supabase
+      const { data, error } = await supabase
+        .from('beta_users')
+        .insert([
+          {
+            name: name,
+            email: email,
+          }
+        ])
+        .select()
+
+      if (error) {
+        console.error('Form submission error:', error)
+        
+        // Check if it's a duplicate email error
+        if (error.code === '23505') {
+          alert('This email is already registered. Please use a different email.')
+        } else {
+          const errorMsg = error.message || 'Something went wrong. Please try again.'
+          alert(`Error: ${errorMsg}`)
+        }
+        return
+      }
+
+      // Success
+      setFormSubmitted(true)
+      form.reset()
     } catch (error) {
       console.error('Form submission error:', error)
-      alert('Something went wrong. Please try again.')
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Error: ${errorMessage}. Check the browser console for details.`)
     } finally {
       setIsSubmitting(false)
     }
@@ -649,13 +674,9 @@ export default function Home() {
                       </div>
                     ) : (
                       <form
-                        name="beta-signup"
-                        method="POST"
-                        data-netlify="true"
                         onSubmit={handleFormSubmit}
                         className="space-y-3 sm:space-y-4"
                       >
-                        <input type="hidden" name="form-name" value="beta-signup" />
                         <div>
                           <label htmlFor="name" className="sr-only">
                             Name

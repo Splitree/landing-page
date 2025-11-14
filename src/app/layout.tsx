@@ -55,12 +55,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         </head>
         <body className="antialiased font-sans bg-brand-background text-brand-text-primary">
-          {/* Hidden form for Netlify to detect at build time */}
-          <form name="beta-signup" method="POST" data-netlify="true" hidden>
-            <input type="hidden" name="form-name" value="beta-signup" />
-            <input type="text" name="name" />
-            <input type="email" name="email" />
-          </form>
           {children}
         </body>
     </html>
