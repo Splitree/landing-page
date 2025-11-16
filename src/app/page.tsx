@@ -136,7 +136,7 @@ export default function Home() {
             <span className="text-sm font-semibold text-brand-primary">Beta Now Available • Join Early Access</span>
               </div>
               
-              <h1 className="heading-xl mb-6 text-brand-primary">
+              <h1 className="heading-xl mb-6 text-brand-primary leading-[1.05]">
                 <span className="inline-block whitespace-normal sm:whitespace-nowrap">Automate Expenses</span>{' '}
                 with <span className="text-gradient inline-block">AI</span>
               </h1>
