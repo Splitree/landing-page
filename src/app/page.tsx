@@ -15,6 +15,7 @@ import {
 export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const betaSignupCount = 25
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
@@ -131,10 +132,14 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="text-center lg:text-left z-10"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-icon-bg-light border border-brand-border-subtle mb-6">
-            <SparklesIcon className="w-5 h-5 text-brand-primary" />
-            <span className="text-sm font-semibold text-brand-primary">Beta Now Available • Join Early Access</span>
+              
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-brand-border shadow-soft-1 mb-2">
+                <div className="w-7 h-7 rounded-full bg-brand-accent/10 flex items-center justify-center text-base">🎉</div>
+                <span className="text-sm text-brand-primary font-semibold">
+                  First 100 sign‑ups get 1 month of Handl Pro free at launch
+                </span>
               </div>
+              
               
               <h1 className="heading-xl mb-6 text-brand-primary leading-[1.05]">
                 <span className="inline-block whitespace-normal sm:whitespace-nowrap">Automate Expenses</span>{' '}
@@ -169,8 +174,8 @@ export default function Home() {
               {/* Stats */}
               <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-brand-primary">Beta</div>
-                  <div className="text-sm text-brand-text-secondary mt-1">Live Now</div>
+                  <div className="text-3xl font-bold text-brand-primary">{betaSignupCount}</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Signed Up</div>
                 </div>
                 <div className="text-center lg:text-left">
                   <div className="text-3xl font-bold text-brand-primary">2s</div>
@@ -347,7 +352,7 @@ export default function Home() {
                     <div className="h-2 w-24 bg-brand-primary rounded mb-1"></div>
                     <div className="h-1.5 w-32 bg-brand-border-subtle rounded"></div>
                   </div>
-                </div>
+              </div>
                 <CheckCircleIcon className="w-6 h-6 text-brand-primary flex-shrink-0" />
             </div>
             </motion.div>
@@ -696,16 +701,7 @@ export default function Home() {
                             </>
                           )}
                         </button>
-                        <p className="text-xs text-brand-text-tertiary mt-3 sm:mt-4 px-2">
-                      By signing up, you agree to our{" "}
-                      <a href="/terms" className="underline hover:text-brand-primary">
-                        Terms of Service
-                      </a>{" "}
-                      and{" "}
-                      <a href="/privacy" className="underline hover:text-brand-primary">
-                        Privacy Policy
-                      </a>
-                    </p>
+                        <div className="text-center mt-3 sm:mt-4"></div>
                       </form>
                     )}
                   </div>
@@ -713,27 +709,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Stats */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-12 grid grid-cols-3 gap-6 max-w-2xl mx-auto"
-            >
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">100+</div>
-                <div className="text-sm text-white/80">Beta Testers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">iOS</div>
-                <div className="text-sm text-white/80">TestFlight Ready</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">⭐️</div>
-                <div className="text-sm text-white/80">Early Feedback</div>
-                </div>
-              </motion.div>
+            {/* (Removed bottom three-point stats; signup count shown under button) */}
           </div>
         </div>
       </section>
