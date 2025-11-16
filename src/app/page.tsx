@@ -820,7 +820,7 @@ export default function Home() {
           
           <div className="mt-8 pt-8 border-t border-white/10 text-center">
             <p className="text-white/60 text-sm">
-              © {new Date().getFullYear()} Handl. All rights reserved.
+              © {new Date().getFullYear()} Handl Technologies Inc. All rights reserved.
             </p>
           </div>
         </div>
