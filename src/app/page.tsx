@@ -137,8 +137,8 @@ export default function Home() {
               </div>
               
               <h1 className="heading-xl mb-6 text-brand-primary">
-                <span className="inline-block whitespace-nowrap">Automate Expenses</span>{' '}
-                with <span className="text-gradient inline-block whitespace-nowrap">AI</span>
+                <span className="inline-block whitespace-normal sm:whitespace-nowrap">Automate Expenses</span>{' '}
+                with <span className="text-gradient inline-block">AI</span>
               </h1>
               
               <p className="text-xl md:text-2xl text-brand-text-secondary mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
