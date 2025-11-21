@@ -45,6 +45,9 @@ const sections = [
       "Handl may offer beta, preview, or experimental features (“Beta Features”). These are provided for evaluation purposes, may be subject to additional rules, and could be throttled, suspended, or discontinued without notice.",
       "Beta Features are provided “as is” and may be less reliable than generally available functionality.",
       "You grant Handl a non-exclusive, royalty-free license to use feedback or suggestions you submit for product improvement, provided that we do not publicly attribute feedback to you without consent.",
+      "",
+      "**Beta Program Offer Terms & Conditions:**",
+      "This offer is valid only for users who (1) download and install the Handl beta app via TestFlight, and (2) provide at least one piece of feedback during the beta period. The free month of Handl Pro will be applied to your account upon the official launch of Handl Pro. Offer is non-transferable and subject to availability. We reserve the right to modify or cancel this promotion at any time. Eligibility will be verified at launch.",
     ],
   },
   {
