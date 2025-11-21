@@ -136,7 +136,7 @@ export default function Home() {
               <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-brand-border shadow-soft-1 mb-2">
                 <div className="w-7 h-7 rounded-full bg-brand-accent/10 flex items-center justify-center text-base">🎉</div>
                 <span className="text-sm text-brand-primary font-semibold">
-                  First 100 sign‑ups get 1 month of Handl Pro free at launch
+                  First 100 users will have premium access to the app when we launch
                 </span>
               </div>
               
@@ -147,7 +147,7 @@ export default function Home() {
               </h1>
               
               <p className="text-xl md:text-2xl text-brand-text-secondary mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                We&apos;re building the first hands-free OS for expense management, automating tracking, 
+                We&apos;re building the first OS for expense management, automating tracking, 
                 splitting, and settlement for everyday users.
               </p>
               
