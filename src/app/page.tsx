@@ -64,12 +64,25 @@ export default function Home() {
 
   // Function to fetch user location from IP address
   const fetchUserLocation = async (): Promise<{ country: string | null, city: string | null }> => {
+    // Type definitions for API responses
+    interface IpWhoIsResponse {
+      success?: boolean
+      country?: string
+      city?: string
+    }
+
+    interface IpApiCoResponse {
+      error?: boolean
+      country_name?: string
+      city?: string
+    }
+
     // Try multiple APIs as fallback
     const apis = [
       {
         name: 'ipwho.is',
         url: 'https://ipwho.is/',
-        parseResponse: (data: any) => {
+        parseResponse: (data: IpWhoIsResponse) => {
           if (data.success !== false) {
             return { country: data.country || null, city: data.city || null }
           }
@@ -79,7 +92,7 @@ export default function Home() {
       {
         name: 'ipapi.co',
         url: 'https://ipapi.co/json/',
-        parseResponse: (data: any) => {
+        parseResponse: (data: IpApiCoResponse) => {
           if (data.error !== true) {
             return { country: data.country_name || null, city: data.city || null }
           }
