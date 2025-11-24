@@ -16,6 +16,9 @@ import { supabase } from '@/lib/supabase'
 export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [emailError, setEmailError] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const betaSignupCount = 25
 
   const scrollToSection = (id: string) => {
@@ -37,37 +40,69 @@ export default function Home() {
 
   // Function to fetch user location from IP address
   const fetchUserLocation = async (): Promise<{ country: string | null, city: string | null }> => {
-    try {
-      // Set timeout to prevent blocking (2 seconds max)
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 2000)
-      
-      const response = await fetch('https://ip-api.com/json/?fields=status,country,city', {
-        signal: controller.signal
-      })
-      
-      clearTimeout(timeoutId)
-      
-      if (!response.ok) {
-        throw new Error('Location API request failed')
-      }
-      
-      const data = await response.json()
-      
-      // Check if API returned success
-      if (data.status === 'success') {
-        return {
-          country: data.country || null,
-          city: data.city || null
+    // Try multiple APIs as fallback
+    const apis = [
+      {
+        name: 'ipwho.is',
+        url: 'https://ipwho.is/',
+        parseResponse: (data: any) => {
+          if (data.success !== false) {
+            return { country: data.country || null, city: data.city || null }
+          }
+          return null
+        }
+      },
+      {
+        name: 'ipapi.co',
+        url: 'https://ipapi.co/json/',
+        parseResponse: (data: any) => {
+          if (data.error !== true) {
+            return { country: data.country_name || null, city: data.city || null }
+          }
+          return null
         }
       }
-      
-      return { country: null, city: null }
-    } catch (error) {
-      // Silently fail - location is optional and shouldn't block submission
-      console.warn('Location fetch failed (non-blocking):', error)
-      return { country: null, city: null }
+    ]
+
+    for (const api of apis) {
+      try {
+        // Set timeout to prevent blocking (2 seconds per API)
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 2000)
+        
+        console.log(`Fetching location from ${api.name}...`)
+        const response = await fetch(api.url, {
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json',
+          }
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          console.warn(`${api.name} HTTP error:`, response.status)
+          continue // Try next API
+        }
+        
+        const data = await response.json()
+        console.log(`${api.name} response:`, data)
+        
+        const location = api.parseResponse(data)
+        if (location) {
+          console.log('Location fetched successfully:', location)
+          return location
+        }
+      } catch (error) {
+        console.warn(`${api.name} failed:`, error)
+        // Continue to next API
+        continue
+      }
     }
+    
+    // All APIs failed
+    console.warn('All location APIs failed, proceeding without location data')
+    return { country: null, city: null }
   }
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,10 +117,24 @@ export default function Home() {
     const email = formData.get('email')?.toString().trim()
 
     if (!name || !email) {
-      alert('Please fill in all fields.')
+      setErrorMessage('Please fill in all fields.')
+      setShowErrorModal(true)
       setIsSubmitting(false)
       return
     }
+
+    // Validate email format with regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError(true)
+      setErrorMessage('Please enter a valid email address.')
+      setShowErrorModal(true)
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Clear error if email is valid
+    setEmailError(false)
 
     try {
       // Verify Supabase client is initialized
@@ -95,6 +144,7 @@ export default function Home() {
 
       // Fetch user location (non-blocking - will return null if it fails)
       const location = await fetchUserLocation()
+      console.log('Location to be inserted:', location)
 
       // Insert into Supabase with location data
       const { data, error } = await supabase
@@ -108,27 +158,33 @@ export default function Home() {
           }
         ])
         .select()
+      
+      console.log('Supabase insert result:', { data, error })
 
       if (error) {
         console.error('Form submission error:', error)
         
         // Check if it's a duplicate email error
         if (error.code === '23505') {
-          alert('This email is already registered. Please use a different email.')
+          setErrorMessage('This email is already registered. Please use a different email.')
+          setShowErrorModal(true)
         } else {
           const errorMsg = error.message || 'Something went wrong. Please try again.'
-          alert(`Error: ${errorMsg}`)
+          setErrorMessage(`Error: ${errorMsg}`)
+          setShowErrorModal(true)
         }
         return
       }
 
       // Success
       setFormSubmitted(true)
+      setEmailError(false)
       form.reset()
     } catch (error) {
       console.error('Form submission error:', error)
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
-      alert(`Error: ${errorMessage}. Check the browser console for details.`)
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred'
+      setErrorMessage(`Error: ${errorMsg}. Check the browser console for details.`)
+      setShowErrorModal(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -136,6 +192,39 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden">
+      {/* Custom Error Modal */}
+      {showErrorModal && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowErrorModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border-2 border-brand-border"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-brand-primary mb-2 font-nunito">Oops!</h3>
+                <p className="text-brand-text-secondary mb-6">{errorMessage}</p>
+                <button
+                  onClick={() => setShowErrorModal(false)}
+                  className="w-full px-6 py-3 rounded-2xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
       {/* Navigation */}
       <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
         <div 
@@ -720,6 +809,7 @@ export default function Home() {
                     ) : (
                       <form
                         onSubmit={handleFormSubmit}
+                        noValidate
                         className="space-y-3 sm:space-y-4"
                       >
                         <div>
@@ -740,12 +830,16 @@ export default function Home() {
                             Email
                           </label>
                           <input
-                            type="email"
+                            type="text"
                             id="email"
                             name="email"
-                            required
                             placeholder="Your email"
-                            className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-brand-border text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base"
+                            onChange={() => setEmailError(false)}
+                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base ${
+                              emailError 
+                                ? 'border-red-300 focus:border-red-500' 
+                                : 'border-brand-border focus:border-brand-primary'
+                            }`}
                           />
                         </div>
                         <button
