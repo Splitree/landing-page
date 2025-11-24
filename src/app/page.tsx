@@ -34,6 +34,41 @@ export default function Home() {
     }
   }
 
+  // Function to fetch user location from IP address
+  const fetchUserLocation = async (): Promise<{ country: string | null, city: string | null }> => {
+    try {
+      // Set timeout to prevent blocking (2 seconds max)
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 2000)
+      
+      const response = await fetch('https://ip-api.com/json/?fields=status,country,city', {
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!response.ok) {
+        throw new Error('Location API request failed')
+      }
+      
+      const data = await response.json()
+      
+      // Check if API returned success
+      if (data.status === 'success') {
+        return {
+          country: data.country || null,
+          city: data.city || null
+        }
+      }
+      
+      return { country: null, city: null }
+    } catch (error) {
+      // Silently fail - location is optional and shouldn't block submission
+      console.warn('Location fetch failed (non-blocking):', error)
+      return { country: null, city: null }
+    }
+  }
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -57,13 +92,18 @@ export default function Home() {
         throw new Error('Supabase client not initialized. Check your environment variables.')
       }
 
-      // Insert into Supabase
+      // Fetch user location (non-blocking - will return null if it fails)
+      const location = await fetchUserLocation()
+
+      // Insert into Supabase with location data
       const { data, error } = await supabase
         .from('beta_users')
         .insert([
           {
             name: name,
             email: email,
+            country: location.country,
+            city: location.city,
           }
         ])
         .select()
