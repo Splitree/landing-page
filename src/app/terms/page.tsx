@@ -11,7 +11,7 @@ const sections = [
     id: "acceptance",
     title: "1. Acceptance of Terms",
     content: [
-      "These Terms & Conditions (“Terms”) are a legal agreement between you (“you”, “your”) and Handl Inc. (“Handl”, “we”, “us”, or “our”). They govern your access to and use of our mobile application, website, beta programs, and related online services (collectively, the “Services”).",
+      "These Terms & Conditions (“Terms”) are a legal agreement between you (“you”, “your”) and Handl Automation Inc. (“Handl”, “we”, “us”, or “our”). They govern your access to and use of our mobile application, website, beta programs, and related online services (collectively, the “Services”).",
       "By creating an account, accessing, or using the Services, you confirm that you have read, understood, and agree to be bound by these Terms as well as our Privacy Policy. If you do not agree, you must not use the Services.",
     ],
   },
@@ -45,6 +45,9 @@ const sections = [
       "Handl may offer beta, preview, or experimental features (“Beta Features”). These are provided for evaluation purposes, may be subject to additional rules, and could be throttled, suspended, or discontinued without notice.",
       "Beta Features are provided “as is” and may be less reliable than generally available functionality.",
       "You grant Handl a non-exclusive, royalty-free license to use feedback or suggestions you submit for product improvement, provided that we do not publicly attribute feedback to you without consent.",
+      "",
+      "**Beta Program Offer Terms & Conditions:**",
+      "This offer is valid only for users who (1) download and install the Handl beta app via TestFlight, and (2) provide at least one piece of feedback during the beta period. Premium access will be granted to your account upon the official launch of the app. Offer is non-transferable and subject to availability. We reserve the right to modify or cancel this promotion at any time. Eligibility will be verified at launch.",
     ],
   },
   {
@@ -85,7 +88,7 @@ const sections = [
     title: "8. Intellectual Property",
     content: [
       "Handl and its licensors own all rights, title, and interest in the Services, including software, interfaces, visual design, logos, trademarks, and content.",
-      "You may not use the Handl name, brand elements, or any proprietary content without prior written consent from Handl Inc.",
+      "You may not use the Handl name, brand elements, or any proprietary content without prior written consent from Handl Automation Inc.",
       "Any content you submit while using the Services remains yours. By posting or sharing content, you grant Handl a limited license to host, display, and process that content solely to provide the Services to you and your invited participants.",
     ],
   },
@@ -167,7 +170,7 @@ const sections = [
     id: "contact",
     title: "17. Contact Us",
     content: [
-      "Handl Inc.",
+      "Handl Automation Inc.",
       "Toronto, Ontario, Canada",
       "📧 tryhandl.it@gmail.com",
     ],

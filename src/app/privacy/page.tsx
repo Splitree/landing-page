@@ -127,7 +127,7 @@ const sections = [
     id: "contact",
     title: "12. Contact Us",
     content: [
-      "Handl Inc.",
+      "Handl Automation Inc.",
       "Toronto, Ontario, Canada",
       "📧 tryhandl.it@gmail.com",
     ],
@@ -154,7 +154,7 @@ const PrivacyPage = () => {
             </p>
             <p className="mt-6 text-brand-text-secondary leading-relaxed">
               Welcome to Handl. Your right to privacy and data security is
-              important to us. This Privacy Policy explains how Handl Inc.
+              important to us. This Privacy Policy explains how Handl Automation Inc.
               (“Handl”, “we”, “us”, or “our”) collects, uses, discloses, and
               protects your personal information when you use our mobile
               application, website, and related online services (collectively,
@@ -200,7 +200,7 @@ const PrivacyPage = () => {
                 </h2>
                 <p className="text-brand-text-secondary leading-relaxed">
                   Welcome to Handl. Your right to privacy and data security is
-                  important to us. This Privacy Policy explains how Handl Inc.
+                  important to us. This Privacy Policy explains how Handl Automation Inc.
                   (“Handl”, “we”, “us”, or “our”) collects, uses, discloses, and
                   protects your personal information when you use our mobile
                   application, website, and related online services
