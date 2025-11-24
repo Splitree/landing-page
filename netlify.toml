@@ -2,5 +2,10 @@
   command = "npm run build"
   publish = ".next"
 
+# Configure secrets scanning to ignore public Supabase keys
+# These are intentionally public (anon keys) and protected by RLS policies
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"

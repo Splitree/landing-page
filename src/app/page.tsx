@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { 
@@ -11,11 +11,39 @@ import {
   CheckCircleIcon,
   ArrowRightIcon
 } from '@heroicons/react/24/outline'
+import { supabase } from '@/lib/supabase'
 
 export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const betaSignupCount = 25
+  const [emailError, setEmailError] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [betaSignupCount, setBetaSignupCount] = useState<number | null>(null)
+
+  // Fetch beta signup count from Supabase
+  useEffect(() => {
+    const fetchBetaCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('beta_users')
+          .select('*', { count: 'exact', head: true })
+
+        if (error) {
+          console.error('Error fetching beta count:', error)
+          // Set a default value if fetch fails
+          setBetaSignupCount(0)
+        } else {
+          setBetaSignupCount(count || 0)
+        }
+      } catch (error) {
+        console.error('Error fetching beta count:', error)
+        setBetaSignupCount(0)
+      }
+    }
+
+    fetchBetaCount()
+  }, [])
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
@@ -34,6 +62,86 @@ export default function Home() {
     }
   }
 
+  // Function to fetch user location from IP address
+  const fetchUserLocation = async (): Promise<{ country: string | null, city: string | null }> => {
+    // Type definitions for API responses
+    interface IpWhoIsResponse {
+      success?: boolean
+      country?: string
+      city?: string
+    }
+
+    interface IpApiCoResponse {
+      error?: boolean
+      country_name?: string
+      city?: string
+    }
+
+    // Try multiple APIs as fallback
+    const apis = [
+      {
+        name: 'ipwho.is',
+        url: 'https://ipwho.is/',
+        parseResponse: (data: IpWhoIsResponse) => {
+          if (data.success !== false) {
+            return { country: data.country || null, city: data.city || null }
+          }
+          return null
+        }
+      },
+      {
+        name: 'ipapi.co',
+        url: 'https://ipapi.co/json/',
+        parseResponse: (data: IpApiCoResponse) => {
+          if (data.error !== true) {
+            return { country: data.country_name || null, city: data.city || null }
+          }
+          return null
+        }
+      }
+    ]
+
+    for (const api of apis) {
+      try {
+        // Set timeout to prevent blocking (2 seconds per API)
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 2000)
+        
+        console.log(`Fetching location from ${api.name}...`)
+        const response = await fetch(api.url, {
+          signal: controller.signal,
+          headers: {
+            'Accept': 'application/json',
+          }
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          console.warn(`${api.name} HTTP error:`, response.status)
+          continue // Try next API
+        }
+        
+        const data = await response.json()
+        console.log(`${api.name} response:`, data)
+        
+        const location = api.parseResponse(data)
+        if (location) {
+          console.log('Location fetched successfully:', location)
+          return location
+        }
+      } catch (error) {
+        console.warn(`${api.name} failed:`, error)
+        // Continue to next API
+        continue
+      }
+    }
+    
+    // All APIs failed
+    console.warn('All location APIs failed, proceeding without location data')
+    return { country: null, city: null }
+  }
+
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -41,29 +149,87 @@ export default function Home() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
+    // Extract form values
+    const name = formData.get('name')?.toString().trim()
+    const email = formData.get('email')?.toString().trim()
+
+    if (!name || !email) {
+      setErrorMessage('Please fill in all fields.')
+      setShowErrorModal(true)
+      setIsSubmitting(false)
+      return
+    }
+
+    // Validate email format with regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError(true)
+      setErrorMessage('Please enter a valid email address.')
+      setShowErrorModal(true)
+      setIsSubmitting(false)
+      return
+    }
+    
+    // Clear error if email is valid
+    setEmailError(false)
+
     try {
-      // Convert FormData to URLSearchParams for Netlify form submission
-      const params = new URLSearchParams()
-      formData.forEach((value, key) => {
-        params.append(key, value.toString())
-      })
+      // Verify Supabase client is initialized
+      if (!supabase) {
+        throw new Error('Supabase client not initialized. Check your environment variables.')
+      }
 
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: params.toString(),
-      })
+      // Fetch user location (non-blocking - will return null if it fails)
+      const location = await fetchUserLocation()
+      console.log('Location to be inserted:', location)
 
-      if (response.ok) {
-        setFormSubmitted(true)
-        form.reset()
-      } else {
-        console.error('Form submission failed')
-        alert('Something went wrong. Please try again.')
+      // Insert into Supabase with location data
+      const { data, error } = await supabase
+        .from('beta_users')
+        .insert([
+          {
+            name: name,
+            email: email,
+            country: location.country,
+            city: location.city,
+          }
+        ])
+        .select()
+      
+      console.log('Supabase insert result:', { data, error })
+
+      if (error) {
+        console.error('Form submission error:', error)
+        
+        // Check if it's a duplicate email error
+        if (error.code === '23505') {
+          setErrorMessage('This email is already registered. Please use a different email.')
+          setShowErrorModal(true)
+        } else {
+          const errorMsg = error.message || 'Something went wrong. Please try again.'
+          setErrorMessage(`Error: ${errorMsg}`)
+          setShowErrorModal(true)
+        }
+        return
+      }
+
+      // Success
+      setFormSubmitted(true)
+      setEmailError(false)
+      form.reset()
+      
+      // Refresh the beta signup count
+      const { count } = await supabase
+        .from('beta_users')
+        .select('*', { count: 'exact', head: true })
+      if (count !== null) {
+        setBetaSignupCount(count)
       }
     } catch (error) {
       console.error('Form submission error:', error)
-      alert('Something went wrong. Please try again.')
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred'
+      setErrorMessage(`Error: ${errorMsg}. Check the browser console for details.`)
+      setShowErrorModal(true)
     } finally {
       setIsSubmitting(false)
     }
@@ -71,6 +237,39 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden">
+      {/* Custom Error Modal */}
+      {showErrorModal && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowErrorModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border-2 border-brand-border"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-brand-primary mb-2 font-nunito">Oops!</h3>
+                <p className="text-brand-text-secondary mb-6">{errorMessage}</p>
+                <button
+                  onClick={() => setShowErrorModal(false)}
+                  className="w-full px-6 py-3 rounded-2xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
       {/* Navigation */}
       <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
         <div 
@@ -174,7 +373,9 @@ export default function Home() {
               {/* Stats */}
               <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-brand-primary">{betaSignupCount}</div>
+                  <div className="text-3xl font-bold text-brand-primary">
+                    {betaSignupCount !== null ? betaSignupCount : '...'}
+                  </div>
                   <div className="text-sm text-brand-text-secondary mt-1">Signed Up</div>
                 </div>
                 <div className="text-center lg:text-left">
@@ -654,13 +855,10 @@ export default function Home() {
                       </div>
                     ) : (
                       <form
-                        name="beta-signup"
-                        method="POST"
-                        data-netlify="true"
                         onSubmit={handleFormSubmit}
+                        noValidate
                         className="space-y-3 sm:space-y-4"
                       >
-                        <input type="hidden" name="form-name" value="beta-signup" />
                         <div>
                           <label htmlFor="name" className="sr-only">
                             Name
@@ -679,12 +877,16 @@ export default function Home() {
                             Email
                           </label>
                           <input
-                            type="email"
+                            type="text"
                             id="email"
                             name="email"
-                            required
                             placeholder="Your email"
-                            className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-brand-border text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base"
+                            onChange={() => setEmailError(false)}
+                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base ${
+                              emailError 
+                                ? 'border-red-300 focus:border-red-500' 
+                                : 'border-brand-border focus:border-brand-primary'
+                            }`}
                           />
                         </div>
                         <button
