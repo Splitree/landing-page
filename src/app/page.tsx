@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { 
@@ -19,7 +19,31 @@ export default function Home() {
   const [emailError, setEmailError] = useState(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const betaSignupCount = 25
+  const [betaSignupCount, setBetaSignupCount] = useState<number | null>(null)
+
+  // Fetch beta signup count from Supabase
+  useEffect(() => {
+    const fetchBetaCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('beta_users')
+          .select('*', { count: 'exact', head: true })
+
+        if (error) {
+          console.error('Error fetching beta count:', error)
+          // Set a default value if fetch fails
+          setBetaSignupCount(0)
+        } else {
+          setBetaSignupCount(count || 0)
+        }
+      } catch (error) {
+        console.error('Error fetching beta count:', error)
+        setBetaSignupCount(0)
+      }
+    }
+
+    fetchBetaCount()
+  }, [])
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
@@ -180,6 +204,14 @@ export default function Home() {
       setFormSubmitted(true)
       setEmailError(false)
       form.reset()
+      
+      // Refresh the beta signup count
+      const { count } = await supabase
+        .from('beta_users')
+        .select('*', { count: 'exact', head: true })
+      if (count !== null) {
+        setBetaSignupCount(count)
+      }
     } catch (error) {
       console.error('Form submission error:', error)
       const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred'
@@ -328,7 +360,9 @@ export default function Home() {
               {/* Stats */}
               <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-brand-primary">{betaSignupCount}</div>
+                  <div className="text-3xl font-bold text-brand-primary">
+                    {betaSignupCount !== null ? betaSignupCount : '...'}
+                  </div>
                   <div className="text-sm text-brand-text-secondary mt-1">Signed Up</div>
                 </div>
                 <div className="text-center lg:text-left">
