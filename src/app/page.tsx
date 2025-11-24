@@ -898,7 +898,7 @@ export default function Home() {
                             'Submitting...'
                           ) : (
                             <>
-                      Join the Beta Waitlist
+                      Join the Beta
                               <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
                             </>
                           )}
