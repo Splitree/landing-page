@@ -308,7 +308,7 @@ export default function Home() {
                 onClick={handleJoinBeta}
                 className="px-6 py-2.5 rounded-xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
               >
-                Join Beta
+                Try it Now
               </button>
             </div>
           </div>
@@ -354,7 +354,7 @@ export default function Home() {
                   onClick={handleJoinBeta}
                   className="btn-primary w-full sm:w-auto group"
                 >
-                  Join the Beta
+                  Try it Now
                   <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button 
@@ -771,18 +771,18 @@ export default function Home() {
           </div>
 
               <h2 className="heading-lg text-white mb-6">
-                Join the Handl Beta
+                Try Handl Today
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto mb-12">
                 Be among the first to experience the future of expense splitting. 
-                Download TestFlight and join our beta program today.
+                Download TestFlight and try our beta today.
               </p>
 
               <button
                 onClick={handleJoinBeta}
                 className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white text-brand-primary font-bold text-lg hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group"
               >
-                Join the Beta on TestFlight
+                Try it Now on TestFlight
                 <ArrowRightIcon className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
 
@@ -858,7 +858,7 @@ export default function Home() {
                 onClick={handleJoinBeta}
                 className="btn-primary"
               >
-                Join the Beta Today
+                Try it Now
                 <ArrowRightIcon className="w-5 h-5 ml-2" />
               </button>
             </div>
