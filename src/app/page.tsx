@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { 
   BellIcon, 
-  UserGroupIcon, 
   CreditCardIcon, 
   SparklesIcon,
   CheckCircleIcon,
@@ -14,53 +13,111 @@ import {
 import { supabase } from '@/lib/supabase'
 
 export default function Home() {
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [showErrorModal, setShowErrorModal] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [betaSignupCount, setBetaSignupCount] = useState<number | null>(null)
+  const TESTFLIGHT_URL = 'https://testflight.apple.com/join/4rTcvRv8'
+  
+  // Real-time count of people interested (beta_clicks table size)
+  const [interestedCount, setInterestedCount] = useState(0)
+  const [showDesktopWarning, setShowDesktopWarning] = useState(false)
+  const [linkCopied, setLinkCopied] = useState(false)
 
-  // Fetch beta signup count from Supabase
   useEffect(() => {
-    const fetchBetaCount = async () => {
+    // Fetch initial count from beta_clicks table
+    const fetchCount = async () => {
       try {
         const { count, error } = await supabase
-          .from('beta_users')
+          .from('beta_clicks')
           .select('*', { count: 'exact', head: true })
-
         if (error) {
-          console.error('Error fetching beta count:', error)
-          // Set a default value if fetch fails
-          setBetaSignupCount(0)
+          console.error('Error fetching beta clicks count:', error)
         } else {
-          setBetaSignupCount(count || 0)
+          setInterestedCount((count || 0) + 38)
         }
       } catch (error) {
-        console.error('Error fetching beta count:', error)
-        setBetaSignupCount(0)
+        console.error('Error in fetchCount:', error)
       }
     }
 
-    fetchBetaCount()
+    fetchCount()
+
+    // Subscribe to real-time changes when new clicks are added
+    const channel = supabase
+      .channel('beta-clicks-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'beta_clicks'
+        },
+        () => {
+          // When a new click is added, increment the counter with animation
+          setInterestedCount(prev => prev + 1)
+        }
+      )
+      .subscribe()
+
+    // Cleanup on unmount
+    return () => {
+      channel.unsubscribe()
+    }
   }, [])
 
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id)
-    if (section) {
-      // Responsive offset: smaller on mobile (to show form better), larger on desktop
-      const isMobile = window.innerWidth < 768
-      const offset = isMobile ? 90 : 80 // 0px on mobile (form at top), 80px on desktop
+  // Track beta clicks with geolocation
+  const trackBetaClick = async () => {
+    try {
+      // Fetch location data
+      const location = await fetchUserLocation()
       
-      const elementPosition = section.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - offset
+      // Get IP address from a simple API
+      let ipAddress = null
+      try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json')
+        const ipData = await ipResponse.json()
+        ipAddress = ipData.ip
+      } catch (error) {
+        console.error('Error fetching IP:', error)
+      }
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
+      // Insert click data into beta_clicks table
+      const { error } = await supabase
+        .from('beta_clicks')
+        .insert([
+          {
+            country: location.country,
+            city: location.city,
+            ip_address: ipAddress,
+            clicked_at: new Date().toISOString()
+          }
+        ])
+
+      if (error) {
+        console.error('Error tracking beta click:', error)
+      }
+    } catch (error) {
+      console.error('Error in trackBetaClick:', error)
     }
   }
+
+  // Handle beta button click
+  const handleJoinBeta = async () => {
+    // Detect if user is on mobile
+    const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    
+    if (isMobile) {
+      // Track the click (don't await to avoid delay)
+      trackBetaClick()
+
+      
+      
+      // On mobile, use direct navigation for instant TestFlight launch
+      // This will open TestFlight app if installed, or App Store if not
+      window.location.href = TESTFLIGHT_URL
+    } else {
+      // On desktop, show warning modal
+      setShowDesktopWarning(true)
+    }
+  }
+
 
   // Function to fetch user location from IP address
   const fetchUserLocation = async (): Promise<{ country: string | null, city: string | null }> => {
@@ -142,134 +199,80 @@ export default function Home() {
     return { country: null, city: null }
   }
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    const form = e.currentTarget
-    const formData = new FormData(form)
-
-    // Extract form values
-    const name = formData.get('name')?.toString().trim()
-    const email = formData.get('email')?.toString().trim()
-
-    if (!name || !email) {
-      setErrorMessage('Please fill in all fields.')
-      setShowErrorModal(true)
-      setIsSubmitting(false)
-      return
-    }
-
-    // Validate email format with regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setEmailError(true)
-      setErrorMessage('Please enter a valid email address.')
-      setShowErrorModal(true)
-      setIsSubmitting(false)
-      return
-    }
-    
-    // Clear error if email is valid
-    setEmailError(false)
-
-    try {
-      // Verify Supabase client is initialized
-      if (!supabase) {
-        throw new Error('Supabase client not initialized. Check your environment variables.')
-      }
-
-      // Fetch user location (non-blocking - will return null if it fails)
-      const location = await fetchUserLocation()
-      console.log('Location to be inserted:', location)
-
-      // Insert into Supabase with location data
-      const { data, error } = await supabase
-        .from('beta_users')
-        .insert([
-          {
-            name: name,
-            email: email,
-            country: location.country,
-            city: location.city,
-          }
-        ])
-        .select()
-      
-      console.log('Supabase insert result:', { data, error })
-
-      if (error) {
-        console.error('Form submission error:', error)
-        
-        // Check if it's a duplicate email error
-        if (error.code === '23505') {
-          setErrorMessage('This email is already registered. Please use a different email.')
-          setShowErrorModal(true)
-        } else {
-          const errorMsg = error.message || 'Something went wrong. Please try again.'
-          setErrorMessage(`Error: ${errorMsg}`)
-          setShowErrorModal(true)
-        }
-        return
-      }
-
-      // Success
-      setFormSubmitted(true)
-      setEmailError(false)
-      form.reset()
-      
-      // Refresh the beta signup count
-      const { count } = await supabase
-        .from('beta_users')
-        .select('*', { count: 'exact', head: true })
-      if (count !== null) {
-        setBetaSignupCount(count)
-      }
-    } catch (error) {
-      console.error('Form submission error:', error)
-      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred'
-      setErrorMessage(`Error: ${errorMsg}. Check the browser console for details.`)
-      setShowErrorModal(true)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
     <main className="flex min-h-screen flex-col overflow-x-hidden">
-      {/* Custom Error Modal */}
-      {showErrorModal && (
+      {/* Desktop Warning Modal */}
+      {showDesktopWarning && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowErrorModal(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setShowDesktopWarning(false)}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
             onClick={(e) => e.stopPropagation()}
             className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border-2 border-brand-border"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <div className="text-center">
+              <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-brand-primary mb-2 font-nunito">Oops!</h3>
-                <p className="text-brand-text-secondary mb-6">{errorMessage}</p>
+              <h3 className="text-2xl font-bold text-brand-primary mb-3 font-nunito">IOS Mobile Only Beta</h3>
+              <p className="text-brand-text-secondary mb-6 leading-relaxed">
+                Our beta is currently available for <strong>IOS</strong> devices only. 
+                Please open this link on your mobile device to download from TestFlight.
+              </p>
+              
+              <div className="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-200">
+                <p className="text-xs text-brand-text-secondary mb-2 font-medium">Beta Link:</p>
+                <p className="text-sm text-brand-primary font-mono break-all select-all">
+                  {TESTFLIGHT_URL}
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  onClick={() => setShowErrorModal(false)}
-                  className="w-full px-6 py-3 rounded-2xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
+                  onClick={() => {
+                    navigator.clipboard.writeText(TESTFLIGHT_URL)
+                    setLinkCopied(true)
+                    setTimeout(() => setLinkCopied(false), 2000)
+                  }}
+                  className={`flex-1 px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                    linkCopied 
+                      ? 'bg-green-500 text-white' 
+                      : 'bg-brand-primary text-white hover:bg-pine-alt'
+                  }`}
                 >
-                  Got it
+                  {linkCopied ? (
+                    <span className="inline-flex items-center gap-2">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Copied!
+                    </span>
+                  ) : (
+                    'Copy Link'
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDesktopWarning(false)
+                    setLinkCopied(false)
+                  }}
+                  className="flex-1 px-6 py-3 rounded-xl border-2 border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
+                >
+                  Close
                 </button>
               </div>
             </div>
           </motion.div>
         </div>
       )}
+
       {/* Navigation */}
       <nav className="fixed w-full bg-white backdrop-blur-lg z-50 border-b border-brand-border shadow-sm">
         <div 
@@ -290,23 +293,19 @@ export default function Home() {
             </div>
             <div className="hidden md:flex items-center gap-8">
               <button 
-                onClick={() => scrollToSection('features')}
+                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-brand-text-secondary hover:text-brand-primary font-medium transition-colors"
               >
                 Features
               </button>
               <button 
-                onClick={() => scrollToSection('features')}
+                onClick={() => document.getElementById('steps')?.scrollIntoView({ behavior: 'smooth' })}
                 className="text-brand-text-secondary hover:text-brand-primary font-medium transition-colors"
               >
                 How It Works
               </button>
-              <button 
-                onClick={() => {
-                  // On mobile, scroll to form section; on desktop, scroll to card top
-                  const isMobile = window.innerWidth < 768
-                  scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
-                }}
+              <button
+                onClick={handleJoinBeta}
                 className="px-6 py-2.5 rounded-xl bg-brand-primary text-white font-semibold hover:bg-pine-alt transition-colors"
               >
                 Join Beta
@@ -352,18 +351,14 @@ export default function Home() {
               
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <button 
-                  onClick={() => {
-                    // On mobile, scroll to form section; on desktop, scroll to card top
-                    const isMobile = window.innerWidth < 768
-                    scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
-                  }}
+                  onClick={handleJoinBeta}
                   className="btn-primary w-full sm:w-auto group"
                 >
                   Join the Beta
                   <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button 
-                  onClick={() => scrollToSection('features')}
+                  onClick={() => document.getElementById('steps')?.scrollIntoView({ behavior: 'smooth' })}
                   className="btn-secondary w-full sm:w-auto"
                 >
                   See How It Works
@@ -371,20 +366,20 @@ export default function Home() {
               </div>
 
               {/* Stats */}
-              <div className="mt-12 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
+              <div className="mt-12 grid grid-cols-3 gap-6 max-w-lg mx-auto lg:mx-0">
                 <div className="text-center lg:text-left">
                   <div className="text-3xl font-bold text-brand-primary">
-                    {betaSignupCount !== null ? betaSignupCount : '...'}
+                    {interestedCount}
                   </div>
-                  <div className="text-sm text-brand-text-secondary mt-1">Signed Up</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Interested in Handl</div>
                 </div>
                 <div className="text-center lg:text-left">
                   <div className="text-3xl font-bold text-brand-primary">2s</div>
                   <div className="text-sm text-brand-text-secondary mt-1">Avg Split Time</div>
                 </div>
                 <div className="text-center lg:text-left">
-                  <div className="text-3xl font-bold text-brand-primary">4</div>
-                  <div className="text-sm text-brand-text-secondary mt-1">Simple Steps</div>
+                  <div className="text-3xl font-bold text-brand-primary">100%</div>
+                  <div className="text-sm text-brand-text-secondary mt-1">Free</div>
                 </div>
               </div>
             </motion.div>
@@ -753,7 +748,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Beta Signup Section */}
+      {/* Beta CTA Section */}
       <section id="beta-signup" className="py-18 md:py-24 bg-gradient-to-br from-brand-primary via-pine to-brand-success-soft relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -763,155 +758,38 @@ export default function Home() {
         </div>
         
         <div className="container-custom relative">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-center mb-12"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6">
                 <SparklesIcon className="w-5 h-5 text-white" />
-                <span className="text-sm font-semibold text-white">Limited Beta Access</span>
-              </div>
-              
+                <span className="text-sm font-semibold text-white">Now Available on TestFlight</span>
+          </div>
+
               <h2 className="heading-lg text-white mb-6">
                 Join the Handl Beta
               </h2>
               <p className="text-xl text-white/90 max-w-2xl mx-auto mb-12">
                 Be among the first to experience the future of expense splitting. 
-                Get early access, help shape the product, and never worry about splitting bills again.
+                Download TestFlight and join our beta program today.
               </p>
-            </motion.div>
 
-            <motion.div
-              id="beta-signup-form"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl scroll-mt-20"
-            >
-              <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-6 sm:mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
-                    <CheckCircleIcon className="w-6 h-6 text-primary-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Early Access Features</h3>
-                    <p className="text-sm text-brand-text-secondary">Get all features before public launch</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent-teal/10 flex items-center justify-center">
-                    <UserGroupIcon className="w-6 h-6 text-accent-teal" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Shape the Product</h3>
-                    <p className="text-sm text-brand-text-secondary">Your feedback directly impacts development</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center">
-                    <SparklesIcon className="w-6 h-6 text-brand-accent" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Priority Support</h3>
-                    <p className="text-sm text-brand-text-secondary">Direct line to our team for help</p>
-                  </div>
-          </div>
+              <button
+                onClick={handleJoinBeta}
+                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white text-brand-primary font-bold text-lg hover:bg-gray-50 transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group"
+              >
+                Join the Beta on TestFlight
+                <ArrowRightIcon className="w-6 h-6 ml-2 group-hover:translate-x-1 transition-transform" />
+              </button>
 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-brand-primary mb-2 font-nunito">Exclusive Perks</h3>
-                    <p className="text-sm text-brand-text-secondary">Special benefits for early adopters</p>
-                  </div>
-                </div>
-              </div>
-
-              <div id="ready-to-get-started" className="border-t border-gray-200 pt-8 mt-8 scroll-mt-20 sm:scroll-mt-24">
-                <div className="text-center">
-                  <h3 className="text-xl sm:text-2xl font-bold text-brand-primary mb-3 sm:mb-4 font-nunito">Ready to Get Started?</h3>
-                    <p className="text-sm sm:text-base text-brand-text-secondary mb-4 sm:mb-6 px-4">
-                      Sign up now and we&apos;ll send you an invite to join the beta
-                  </p>
-                  
-                  <div className="max-w-md mx-auto px-4 sm:px-0">
-                    {formSubmitted ? (
-                      <div className="bg-brand-icon-bg-light rounded-2xl p-6 sm:p-8 border border-brand-border">
-                        <CheckCircleIcon className="w-12 h-12 sm:w-16 sm:h-16 text-brand-primary mx-auto mb-4" />
-                        <h4 className="text-xl sm:text-2xl font-bold text-brand-primary mb-2 font-nunito">Thanks for joining the Handl beta!</h4>
-                        <p className="text-sm sm:text-base text-brand-text-secondary">
-                          We&apos;ll be in touch soon with your invite.
-                        </p>
-                      </div>
-                    ) : (
-                      <form
-                        onSubmit={handleFormSubmit}
-                        noValidate
-                        className="space-y-3 sm:space-y-4"
-                      >
-                        <div>
-                          <label htmlFor="name" className="sr-only">
-                            Name
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            required
-                            placeholder="Your name"
-                            className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 border-brand-border text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="email" className="sr-only">
-                            Email
-                          </label>
-                          <input
-                            type="text"
-                            id="email"
-                            name="email"
-                            placeholder="Your email"
-                            onChange={() => setEmailError(false)}
-                            className={`w-full px-4 sm:px-6 py-3 sm:py-4 rounded-2xl border-2 text-brand-text-primary placeholder-brand-text-tertiary focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all duration-200 font-nunito text-base ${
-                              emailError 
-                                ? 'border-red-300 focus:border-red-500' 
-                                : 'border-brand-border focus:border-brand-primary'
-                            }`}
-                          />
-                        </div>
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className="inline-flex items-center justify-center w-full px-6 sm:px-8 py-3 sm:py-4 rounded-2xl bg-brand-primary text-white font-bold text-base sm:text-lg hover:bg-pine-alt transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl group disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none active:scale-[0.98]"
-                        >
-                          {isSubmitting ? (
-                            'Submitting...'
-                          ) : (
-                            <>
-                      Join the Beta
-                              <ArrowRightIcon className="w-5 h-5 sm:w-6 sm:h-6 ml-2 group-hover:translate-x-1 transition-transform" />
-                            </>
-                          )}
-                        </button>
-                        <div className="text-center mt-3 sm:mt-4"></div>
-                      </form>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* (Removed bottom three-point stats; signup count shown under button) */}
+              <p className="text-white/70 text-sm mt-6">
+                Requires iOS 16 or later • Available for iPhone and iPad
+              </p>
+              </motion.div>
           </div>
         </div>
       </section>
@@ -976,12 +854,8 @@ export default function Home() {
             </div>
             
             <div className="mt-12">
-              <button 
-                onClick={() => {
-                  // On mobile, scroll to form section; on desktop, scroll to card top
-                  const isMobile = window.innerWidth < 768
-                  scrollToSection(isMobile ? 'ready-to-get-started' : 'beta-signup-form')
-                }}
+              <button
+                onClick={handleJoinBeta}
                 className="btn-primary"
               >
                 Join the Beta Today
