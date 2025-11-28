@@ -105,6 +105,25 @@ npm run lint     # Check for lint issues
 - **Copy & CTA Links** – Update headlines, supporting text, and the beta URL in `src/app/page.tsx`.
 - **Animations** – Fine-tune Framer Motion easing, durations, and delays within the component.
 
+## 🔗 API Redirects
+
+The landing page is configured to redirect `/beta` requests to your backend API:
+
+- **Route**: `/beta` and `/beta/*`
+- **Target**: `https://backend-production-3a62.up.railway.app/beta`
+- **Configuration**: See `netlify.toml` for redirect rules
+
+### Environment Variables
+
+To change the backend URL:
+
+1. Go to your Netlify dashboard
+2. Navigate to **Site settings** → **Environment variables**
+3. Add/update `BACKEND_URL` with your backend URL
+4. Redeploy your site
+
+Current backend: [https://backend-production-3a62.up.railway.app](https://backend-production-3a62.up.railway.app)
+
 ## 📱 About Handl
 
 Handl is the effortless way to keep groups financially in sync:

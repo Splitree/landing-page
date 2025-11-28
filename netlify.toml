@@ -9,3 +9,10 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+  # Redirect /beta to backend API
+  [[redirects]]
+    from = "/beta/*"
+    to = "https://backend-production-3a62.up.railway.app/beta/testflight"
+    status = 302
+    force = true
